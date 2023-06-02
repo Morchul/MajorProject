@@ -12,12 +12,14 @@ public abstract class AI : MonoBehaviour
 
     public void MakeNewDecision()
     {
-        currentPlan = sensor.MakeDecision();
+        if(sensor != null)
+            currentPlan = sensor.MakeDecision();
     }
 
     private void Update()
     {
         sensor.Update();
-        currentPlan.Update();
+        if(currentPlan != null)
+            currentPlan.Update();
     }
 }

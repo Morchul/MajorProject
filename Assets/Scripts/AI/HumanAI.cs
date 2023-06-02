@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestAI : AI
+public class HumanAI : AI
 {
     private Human agent;
 
@@ -10,21 +10,25 @@ public class TestAI : AI
     {
         agent = GetComponent<Human>();
 
-        DecisionTransaction hungry = new DecisionTransaction(this, () => agent.Food < 20); //Will trigger every frame if food under 20 and not eat. Maybe if triggered wait until 15
+        DecisionTransaction hungry = new DecisionTransaction(this, () => agent.Food < 20, () => agent.Food > 20);
 
-        IPlan eatPlan = new BTRoot();
+        BTNode eatAction = new BTEat(agent);
+        IPlan eatPlan = new BTRoot(eatAction, this);
 
         Decision eatDecision = new Decision(eatPlan, () => 1 - (agent.Food / 100)); //Linear utility, depending on how much food left
+
+        Decision doNothing = new Decision(null, () => 0.5f);
 
         State idleState = new State();
         idleState.AddTransaction(hungry);
 
         idleState.AddDecision(eatDecision);
+        idleState.AddDecision(doNothing);
 
         StateMachine stateMachine = new StateMachine(this);
 
-        stateMachine.SetState(idleState);
-
         sensor = stateMachine;
+
+        stateMachine.SetState(idleState);
     }
 }
