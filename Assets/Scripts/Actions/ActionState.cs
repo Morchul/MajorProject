@@ -4,7 +4,17 @@ using UnityEngine;
 
 public enum ActionState
 {
-    ACTIVE,
-    FINISHED,
-    INACTIVE,
+    WAITING = 0,
+    ACTIVE = 1,
+    INTERRUPTED = 2,
+    FINISHED = 3,
+    SLEEPING = 4,
+    INACTIVE = 5,
+}
+
+[System.Flags]
+public enum ActionLayers
+{
+    ARMS = 1,
+    LEGS = 2,
 }

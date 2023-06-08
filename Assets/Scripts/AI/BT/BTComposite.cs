@@ -1,8 +1,8 @@
-public abstract class BTComposite : BTNode
+public abstract class BTComposite : AbstractBTNode
 {
-    protected readonly BTNode[] children;
+    protected readonly AbstractBTNode[] children;
 
-    public BTComposite(params BTNode[] children)
+    public BTComposite(params AbstractBTNode[] children)
     {
         this.children = children;
     }

@@ -1,18 +1,22 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class FoodContainer : MonoBehaviour
 {
-    public float StoredFood { get; private set; }
+    public Stack<Food> foodStored;
 
-    public void AddFood(float amount)
+    private void Awake()
     {
-        StoredFood += amount;
+        foodStored = new Stack<Food>();
     }
 
-    public float TakeFood(float maxAmount)
+    public void AddFood(Food food)
     {
-        float amountTaken = Mathf.Min(maxAmount, StoredFood);
-        StoredFood -= amountTaken;
-        return amountTaken;
+        foodStored.Push(food);
+    }
+
+    public Food TakeFood()
+    {
+        return foodStored.Pop();
     }
 }

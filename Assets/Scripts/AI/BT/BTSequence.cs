@@ -1,17 +1,16 @@
 public class BTSequence : BTComposite
 {
-    public BTSequence(params BTNode[] children) : base(children)
+    public BTSequence(params AbstractBTNode[] children) : base(children)
     {}
 
     public override BTStatus Tick()
     {
-        BTStatus retState = BTStatus.SUCCESS;
-        foreach(BTNode node in children)
+        foreach(AbstractBTNode node in children)
         {
             BTStatus state = node.Tick();
-            if (state == BTStatus.FAILURE) return state;
-            if (state == BTStatus.RUNNING) retState = BTStatus.RUNNING;
+            if (state == BTStatus.FAILURE || state == BTStatus.RUNNING) return state;
         }
-        return retState;
+
+        return BTStatus.SUCCESS;
     }
 }

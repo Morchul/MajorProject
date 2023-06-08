@@ -2,43 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Human : MonoBehaviour, IMoveable, IHungry
+public class Human : BaseEntity, IHungry
 {
     [SerializeField]
-    private float moveSpeed;
+    private int foodDebug;
 
     public float Food { get; set; }
 
-    #region IMoveable
-    public void MoveForward()
+    private void Awake()
     {
-        transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+        ringBuffer = new ActionRingBuffer<Human>(5);
+        Food = 51;
     }
 
-    public void TurnLeft()
+    private void Update()
     {
-        throw new System.NotImplementedException();
-    }
+        Food -= Time.deltaTime;
+        foodDebug = (int)Food;
 
-    public void TurnRight()
-    {
-        throw new System.NotImplementedException();
+        UpdateActions();
     }
-    #endregion
 
     #region Action Queue
-    public ActionRingBuffer ringBuffer;
-    public IAction nextAction;
+    public ActionRingBuffer<Human> ringBuffer;
+    public IAction<Human> nextAction;
 
-    public void AddAction(IAction action)
+    public void AddAction(IAction<Human> action)
     {
-        /*if (action.Instant)
-        {
-            action.Execute();
-            return;
-        }*/
+        if (action.IsActive()) return;
 
         nextAction = action;
+        if(nextAction.Status == ActionState.INACTIVE)
+            nextAction.Status = ActionState.WAITING;
 
         if (ringBuffer.Empty)
         {
@@ -47,7 +42,7 @@ public class Human : MonoBehaviour, IMoveable, IHungry
         else
         {
             bool intersect = false;
-            foreach(IAction curAction in ringBuffer)
+            foreach(IAction<Human> curAction in ringBuffer)
             {
                 if((action.Layer & curAction.Layer) > 0)
                 {
@@ -61,13 +56,45 @@ public class Human : MonoBehaviour, IMoveable, IHungry
         }
     }
 
+    private void ExecuteAction()
+    {
+        if (nextAction.Status == ActionState.INTERRUPTED)
+        {
+            nextAction.Status = ActionState.INACTIVE;
+        }
+        else
+        {
+            Debug.Log("Add new action: " + nextAction.Name);
+
+            ringBuffer.Add(nextAction);
+            nextAction.Execute(this);
+        }
+
+        
+        nextAction = null;
+    }
+
+    private void UpdateActions()
+    {
+        foreach(IAction<Human> action in ringBuffer)
+        {
+            action.Update();
+            if(action.Status == ActionState.FINISHED)
+            {
+                action.Status = ActionState.SLEEPING;
+                ActionFinished();
+            }
+        }
+    }
+
     private void ActionFinished()
     {
         ringBuffer.Remove();
 
-        if(nextAction != null)
+        //Check if nextAction can now be executed
+        if (nextAction != null)
         {
-            foreach (IAction curAction in ringBuffer)
+            foreach (IAction<Human> curAction in ringBuffer)
             {
                 if ((nextAction.Layer & curAction.Layer) > 0)
                 {
@@ -78,27 +105,7 @@ public class Human : MonoBehaviour, IMoveable, IHungry
         }
     }
 
-    private void ExecuteAction()
-    {
-        nextAction.Status = ActionState.ACTIVE;
-        ringBuffer.Add(nextAction);
-        nextAction = null;
-    }
-
-    public void UpdateActions()
-    {
-        foreach(IAction action in ringBuffer)
-        {
-            action.Update();
-            if(action.Status == ActionState.FINISHED)
-                ActionFinished();
-        }
-    }
-
     #endregion
 
-    private void Update()
-    {
-        Food -= Time.deltaTime;
-    }
+
 }

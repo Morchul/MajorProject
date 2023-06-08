@@ -1,9 +1,9 @@
 public class BTRoot : IPlan
 {
-    private readonly BTNode startNode;
+    private readonly AbstractBTNode startNode;
     private readonly AI ai;
 
-    public BTRoot(BTNode startNode, AI ai)
+    public BTRoot(AbstractBTNode startNode, AI ai)
     {
         this.startNode = startNode;
         this.ai = ai;
@@ -11,10 +11,10 @@ public class BTRoot : IPlan
 
     public void Update()
     {
-        BTNode.BTStatus status = startNode.Tick();
+        AbstractBTNode.BTStatus status = startNode.Tick();
 
-        if(status == BTNode.BTStatus.SUCCESS ||
-            status == BTNode.BTStatus.FAILURE)
+        if(status == AbstractBTNode.BTStatus.SUCCESS ||
+            status == AbstractBTNode.BTStatus.FAILURE)
         {
             ai.MakeNewDecision();
         }

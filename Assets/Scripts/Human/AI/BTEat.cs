@@ -2,25 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BTEat : BTNode
+public class BTEat : AbstractBTNode
 {
     private readonly Human human;
+    private readonly HumanAI ai;
 
-    private EatAction eatAction;
-
-    public BTEat(Human human)
+    public BTEat(Human human, HumanAI ai)
     {
         this.human = human;
-        eatAction = new EatAction(human);
+        this.ai = ai;
     }
 
     public override BTStatus Tick()
     {
-        if(eatAction.Status == ActionState.INACTIVE)
-        human.AddAction(eatAction);
-        if (eatAction.Status == ActionState.FINISHED)
-            return BTStatus.SUCCESS;
-        else
-            return BTStatus.RUNNING;
+        ai.TargetFood.EatBy(human);
+        ai.TargetFood = null;
+        return BTStatus.SUCCESS;
     }
 }
