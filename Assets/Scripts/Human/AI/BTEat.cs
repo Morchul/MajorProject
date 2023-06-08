@@ -15,7 +15,9 @@ public class BTEat : AbstractBTNode
 
     public override BTStatus Tick()
     {
-        ai.TargetFood.EatBy(human);
+        if (ai.TargetFood == null) return BTStatus.FAILURE;
+
+        human.AddAction(ai.TargetFood.eatAction);
         ai.TargetFood = null;
         return BTStatus.SUCCESS;
     }

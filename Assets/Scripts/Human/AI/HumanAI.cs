@@ -20,9 +20,13 @@ public class HumanAI : AI
         moveTo.MaxDistanceSqrt = 4;
 
         AbstractBTNode eatAction = new BTEat(agent, this);
-        BTLocateFood locateFood = new BTLocateFood(this);
-        BTSequence eatSequence = new BTSequence(locateFood, moveTo, eatAction);
-        IPlan eatPlan = new BTRoot(eatSequence, this);
+        BTLocateFood locateNearbyFood = new BTLocateFood(this);
+        BTGetFoodFromContainer getFoodFromContainer = new BTGetFoodFromContainer(this);
+
+        BTSequence eatFoodFromContainer = new BTSequence(getFoodFromContainer, moveTo, eatAction);
+        BTSequence eatNearbyFoodSequence = new BTSequence(locateNearbyFood, moveTo, eatAction);
+        BTSelector locateFood = new BTSelector(eatNearbyFoodSequence, eatFoodFromContainer);
+        IPlan eatPlan = new BTRoot(locateFood, this);
 
         Decision eatDecision = new Decision(eatPlan, () => 1 - (agent.Food / 100)); //Linear utility, depending on how much food left
 

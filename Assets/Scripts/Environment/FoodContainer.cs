@@ -19,4 +19,6 @@ public class FoodContainer : MonoBehaviour
     {
         return foodStored.Pop();
     }
+
+    public bool HasFood() => foodStored.Count > 0;
 }

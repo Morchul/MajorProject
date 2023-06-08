@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public interface IAction<in T>
 {
     public void Update();
@@ -13,4 +9,6 @@ public interface IAction<in T>
     public ActionState Status { get; set; }
 
     public string Name { get; }
+
+    public int ActionUsage { get; }
 }

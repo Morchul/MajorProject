@@ -5,6 +5,8 @@ public abstract class BaseAction<T> : IAction<T>
     public abstract int Layer { get; }
     public abstract string Name { get; }
 
+    public virtual int ActionUsage => 0;
+
     public BaseAction()
     {
         status = ActionState.INACTIVE;

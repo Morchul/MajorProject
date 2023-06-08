@@ -5,9 +5,9 @@ using UnityEngine;
 public class TestAction : IAction<BaseEntity>
 {
     public int Layer => throw new System.NotImplementedException();
+    public int ActionUsage => throw new System.NotImplementedException();
 
     public ActionState Status { get; set; }
-
     public string Name { get; set; }
 
     public TestAction(string name = "")
