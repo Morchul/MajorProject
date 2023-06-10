@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestAction : IAction<BaseEntity>
+public class TestAction : IAction
 {
     public int Layer => throw new System.NotImplementedException();
     public int ActionUsage => throw new System.NotImplementedException();
@@ -15,7 +15,7 @@ public class TestAction : IAction<BaseEntity>
         Name = name;
     }
 
-    public void Execute(BaseEntity executioner)
+    public void Execute(Entity executioner)
     {
         throw new System.NotImplementedException();
     }

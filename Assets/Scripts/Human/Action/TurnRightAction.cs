@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurnRightAction : BaseAction<BaseEntity>
+public class TurnRightAction : BaseAction
 {
     public override int Layer => 0;
 
     public override string Name => "Turn right";
 
-    private BaseEntity human;
+    private Entity human;
+    private MoveComponent moveComponent;
 
-    public override void Execute(BaseEntity executioner)
+    public override void Execute(Entity entity)
     {
-        human = executioner;
+        human = entity;
+        moveComponent = human.GetComponent<MoveComponent>(ComponentIDs.MOVE);
     }
 
     public override void Interrupt()
@@ -23,21 +25,23 @@ public class TurnRightAction : BaseAction<BaseEntity>
 
     public override void Update()
     {
-        Vector3 rotation = new Vector3(0, Time.deltaTime * human.TurnSpeed, 0);
+        Vector3 rotation = new Vector3(0, Time.deltaTime * moveComponent.TurnSpeed, 0);
         human.transform.Rotate(rotation);
     }
 }
 
-public class TurnLeftAction : BaseAction<BaseEntity>
+public class TurnLeftAction : BaseAction
 {
     public override int Layer => 0;
     public override string Name => "Turn left";
 
-    private BaseEntity human;
+    private Entity human;
+    private MoveComponent moveComponent;
 
-    public override void Execute(BaseEntity executioner)
+    public override void Execute(Entity entity)
     {
-        human = executioner;
+        this.human = entity;
+        moveComponent = human.GetComponent<MoveComponent>(ComponentIDs.MOVE);
     }
 
     public override void Interrupt()
@@ -48,7 +52,7 @@ public class TurnLeftAction : BaseAction<BaseEntity>
 
     public override void Update()
     {
-        Vector3 rotation = new Vector3(0, Time.deltaTime * -human.TurnSpeed, 0);
+        Vector3 rotation = new Vector3(0, Time.deltaTime * -moveComponent.TurnSpeed, 0);
         human.transform.Rotate(rotation);
     }
 }

@@ -1,8 +1,8 @@
-public interface IAction<in T>
+public interface IAction
 {
     public void Update();
     public void Interrupt();
-    public void Execute(T executioner);
+    public void Execute(Entity entity);
 
     public int Layer { get; }
 

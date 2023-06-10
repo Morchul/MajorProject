@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SmartObjectAction<T> : BaseAction<T>
+public abstract class SmartObjectAction : BaseAction
 {
     private System.Action onExecute;
 
@@ -11,7 +11,7 @@ public abstract class SmartObjectAction<T> : BaseAction<T>
         this.onExecute = onExecute;
     }
 
-    public override void Execute(T executioner)
+    public override void Execute(Entity entity)
     {
         onExecute?.Invoke();
     }

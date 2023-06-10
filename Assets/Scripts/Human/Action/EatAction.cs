@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EatAction : SmartObjectAction<IHungry>
+public class EatAction : SmartObjectAction
 {
     public override int Layer => 0; //Instant action does not need animation or anything does not intersect with everything (for the moment)
 
@@ -15,12 +15,13 @@ public class EatAction : SmartObjectAction<IHungry>
         this.amount = amount;
     }
 
-    public override void Execute(IHungry hungry)
+    public override void Execute(Entity entity)
     {
-        hungry.Food = Mathf.Min(hungry.Food + amount, 100);
-        Debug.Log("Eat... new food meter: " + hungry.Food);
+        HungerComponent hunger = entity.GetComponent<HungerComponent>(ComponentIDs.HUNGER);
+        hunger.Food = Mathf.Min(hunger.Food + amount, 100);
+        Debug.Log("Eat... new food meter: " + hunger.Food);
         Status = ActionState.FINISHED;
-        base.Execute(hungry);
+        base.Execute(entity);
     }
 
     public override void Update() {}

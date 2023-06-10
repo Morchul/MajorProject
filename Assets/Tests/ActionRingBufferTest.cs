@@ -10,7 +10,7 @@ public class ActionRingBufferTest
         TestAction action3 = new TestAction("a3");
         TestAction action4 = new TestAction("a4");
 
-        ActionRingBuffer<BaseEntity> ringBuffer = new ActionRingBuffer<BaseEntity>(3);
+        ActionRingBuffer ringBuffer = new ActionRingBuffer(3);
 
         action1.Status = ActionState.ACTIVE;
         action2.Status = ActionState.ACTIVE;
@@ -82,7 +82,7 @@ public class ActionRingBufferTest
         TestAction action3 = new TestAction("a3");
         TestAction action4 = new TestAction("a4");
 
-        ActionRingBuffer<BaseEntity> ringBuffer = new ActionRingBuffer<BaseEntity>(3);
+        ActionRingBuffer ringBuffer = new ActionRingBuffer(3);
 
         action1.Status = ActionState.ACTIVE;
         action2.Status = ActionState.ACTIVE;

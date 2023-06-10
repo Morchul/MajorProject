@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class BaseAction<T> : IAction<T>
+public abstract class BaseAction : IAction
 {
     public abstract int Layer { get; }
     public abstract string Name { get; }
@@ -29,6 +29,6 @@ public abstract class BaseAction<T> : IAction<T>
             Status = ActionState.INTERRUPTED;
     }
 
-    public abstract void Execute(T executioner);
+    public abstract void Execute(Entity entity);
     public abstract void Update();
 }

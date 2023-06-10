@@ -21,6 +21,6 @@ public static class Extensions
 
     public static Vector2 RandomVector2(float xMin, float xMax, float yMin, float yMax) => new Vector2(Random.Range(xMin, xMax), Random.Range(yMin, yMax));
 
-    public static bool IsActive<T>(this IAction<T> action) => action.Status < ActionState.SLEEPING;
-    public static bool IsInactive<T>(this IAction<T> action) => action.Status > ActionState.FINISHED;
+    public static bool IsActive(this IAction action) => action.Status < ActionState.SLEEPING;
+    public static bool IsInactive(this IAction action) => action.Status > ActionState.FINISHED;
 }

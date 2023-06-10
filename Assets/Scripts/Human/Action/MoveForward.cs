@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveForward : BaseAction<BaseEntity>
+public class MoveForward : BaseAction
 {
     public override int Layer => (int)ActionLayers.LEGS;
 
     public override string Name => "Move forward";
 
-    private BaseEntity baseEntity;
+    private Entity entity;
+    private MoveComponent moveComponent;
 
-    public override void Execute(BaseEntity executioner)
+    public override void Execute(Entity entity)
     {
-        baseEntity = executioner;
+        this.entity = entity;
+        moveComponent = this.entity.GetComponent<MoveComponent>(ComponentIDs.MOVE);
     }
 
     public override void Interrupt()
@@ -23,6 +25,6 @@ public class MoveForward : BaseAction<BaseEntity>
 
     public override void Update()
     {
-        baseEntity.transform.Translate(Vector3.forward * Time.deltaTime * baseEntity.MoveSpeed);
+        entity.transform.Translate(Vector3.forward * Time.deltaTime * moveComponent.MoveSpeed);
     }
 }

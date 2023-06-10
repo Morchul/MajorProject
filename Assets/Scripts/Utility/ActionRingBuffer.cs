@@ -4,9 +4,9 @@ using UnityEngine;
 /// <summary>
 /// 
 /// </summary>
-public class ActionRingBuffer<T> : IEnumerable
+public class ActionRingBuffer : IEnumerable
 {
-	private readonly IAction<T>[] buffer;
+	private readonly IAction[] buffer;
 	private readonly int size;
 
 	public int Head { get; private set; }
@@ -19,7 +19,7 @@ public class ActionRingBuffer<T> : IEnumerable
 		//Size should be increased by one.
 		//If parameter is 3 you need 4 spaces
 		//since one space has to be reserved to signalise it is empty
-		buffer = new IAction<T>[size + 1];
+		buffer = new IAction[size + 1];
 		this.size = size + 1;
 		Head = 0;
 		Tail = 0;
@@ -28,7 +28,7 @@ public class ActionRingBuffer<T> : IEnumerable
 	private int Increase(int value) => ++value % size;
 	private int Decrease(int value) => value == 0 ? size - 1 : --value;
 
-	public void Add(IAction<T> item)
+	public void Add(IAction item)
 	{
 		if(item.Status == ActionState.SLEEPING)
 		{
@@ -81,7 +81,7 @@ public class ActionRingBuffer<T> : IEnumerable
 		//DEBUG_OUTPUT_BUFFER();
 	}
 
-	public IAction<T> this[int index]
+	public IAction this[int index]
 	{
 		get
 		{
