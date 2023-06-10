@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Entity : MonoBehaviour
 {
-    protected Component[] components;
+    protected EntityComponent[] components { get; set; }
 
     protected ActionRingBuffer ringBuffer;
     protected IAction nextAction;
@@ -12,6 +12,7 @@ public abstract class Entity : MonoBehaviour
     protected virtual void Awake()
     {
         ringBuffer = new ActionRingBuffer(5);
+        components = GetComponents<EntityComponent>();
     }
 
     protected virtual void Update()
@@ -19,9 +20,9 @@ public abstract class Entity : MonoBehaviour
         UpdateActions();
     }
 
-    public T GetComponent<T>(int componentID) where T : Component
+    public T GetComponent<T>(int componentID) where T : EntityComponent
     {
-        foreach (Component component in components)
+        foreach (EntityComponent component in components)
             if (component.ID == componentID)
                 return (T)component;
         return null;

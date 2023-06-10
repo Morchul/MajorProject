@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HungerComponent : Component
+public class HungerComponent : EntityComponent
 {
     public override int ID => ComponentIDs.HUNGER;
 

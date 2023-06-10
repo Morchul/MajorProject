@@ -14,8 +14,6 @@ public class ComponentPerformanceTest
     public void LoadScene()
     {
         SceneManager.LoadScene("SampleScene");
-
-        
     }
 
     [Test, Performance]
@@ -25,7 +23,6 @@ public class ComponentPerformanceTest
 
         Measure.Method(
             () => { GetComponentUnity(human); })
-            .GC()
             .Run();
     }
 
@@ -36,7 +33,6 @@ public class ComponentPerformanceTest
 
         Measure.Method(
             () => { GetComponentNew(human); })
-            .GC()
             .Run();
     }
 
@@ -44,7 +40,7 @@ public class ComponentPerformanceTest
     {
         for (int i = 0; i < testIteractions; ++i)
         {
-            human.GetComponent<CarryComponent>(ComponentIDs.CARRY);
+            human.GetComponent<MoveComponent>(ComponentIDs.MOVE);
         }
     }
 

@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class HumanAI : AI
 {
+    [Header("Components")]
+    [SerializeField]
+    private HungerComponent hunger;
+    [SerializeField]
+    private CarryComponent carry;
+
     private Human agent;
 
+    [Header("Blackboard")]
     public Food TargetFood;
     public FoodContainer FoodContainer;
 
     public Vector3 MoveTarget;
 
-    private void Start()
+    private void Awake()
     {
         agent = GetComponent<Human>();
-        HungerComponent hunger = agent.GetComponent<HungerComponent>(ComponentIDs.HUNGER);
-        CarryComponent carry = agent.GetComponent<CarryComponent>(ComponentIDs.CARRY);
 
         DecisionTransaction hungry = new DecisionTransaction(this, () => hunger.Food < 40, () => hunger.Food > 40);
 
