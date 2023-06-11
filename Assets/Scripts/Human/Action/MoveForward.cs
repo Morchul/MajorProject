@@ -5,7 +5,7 @@ using UnityEngine;
 public class MoveForward : BaseAction
 {
     public override int Layer => (int)ActionLayers.LEGS;
-
+    public override int ID => ActionIDs.MOVE_FORWARD;
     public override string Name => "Move forward";
 
     private Entity entity;

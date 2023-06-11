@@ -8,19 +8,15 @@ public class Food : SmartObject
     private float amount;
     public float Amount => amount;
 
-    public override ItemType Type => ItemType.FOOD;
-
-    public EatAction eatAction;
-    public PickUpAction PickUpAction;
+    public override ObjectType Type => ObjectType.FOOD;
 
     private void Awake()
     {
-        eatAction = new EatAction(Amount, Destroy);
-        PickUpAction = new PickUpAction(this, Destroy);
+        actions = new IAction[] { new EatAction(Amount, SetInactive), new PickUpAction(this, SetInactive) };
     }
 
-    private void Destroy()
+    private void SetInactive()
     {
-        Destroy(this.gameObject);
+        gameObject.SetActive(false);
     }
 }

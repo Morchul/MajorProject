@@ -6,6 +6,8 @@ public interface IAction
 
     public int Layer { get; }
 
+    public int ID { get; }
+
     public ActionState Status { get; set; }
 
     public string Name { get; }

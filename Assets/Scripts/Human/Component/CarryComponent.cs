@@ -6,5 +6,21 @@ public class CarryComponent : EntityComponent
 {
     public override int ID => ComponentIDs.CARRY;
 
-    public IItem CarriedItem;
+    //ONLY FOR DEBUG
+    public bool IsNull;
+
+    private ISmartObject tmp;
+    public ISmartObject CarriedItem
+    {
+        get => tmp;
+        set
+        {
+            tmp = value;
+        }
+    }
+
+    private void Update()
+    {
+        IsNull = CarriedItem == null;
+    }
 }

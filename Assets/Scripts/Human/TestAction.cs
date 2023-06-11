@@ -9,6 +9,7 @@ public class TestAction : IAction
 
     public ActionState Status { get; set; }
     public string Name { get; set; }
+    public int ID => 0;
 
     public TestAction(string name = "")
     {

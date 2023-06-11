@@ -13,13 +13,13 @@ public class PutInAction : SmartObjectAction
     }
 
     public override int Layer => 0;
-
+    public override int ID => ActionIDs.PUT_IN;
     public override string Name => "Put in";
 
     public override void Execute(Entity entity)
     {
         CarryComponent carryComponent = entity.GetComponent<CarryComponent>(ComponentIDs.CARRY);
-        if(carryComponent.CarriedItem is Food food)
+        if(carryComponent.CarriedItem != null && carryComponent.CarriedItem is Food food)
         {
             if (container.CanTake(food))
             {

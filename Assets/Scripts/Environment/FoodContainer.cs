@@ -1,15 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class FoodContainer : MonoBehaviour, IContainer<Food>
+public class FoodContainer : SmartObject, IContainer<Food>
 {
     public Stack<Food> foodStored;
 
     [SerializeField]
     private int capacity;
-
-    public PutInAction PutInAction;
-    public TakeOutAction TakeOutAction;
 
     #region DEBUG
     private Renderer renderer;
@@ -18,28 +15,33 @@ public class FoodContainer : MonoBehaviour, IContainer<Food>
     private void Awake()
     {
         foodStored = new Stack<Food>();
-        PutInAction = new PutInAction(this, null);
-        TakeOutAction = new TakeOutAction(this, null);
+
+        actions = new IAction[] { new PutInAction(this, null), new TakeOutAction(this, null) };
 
         renderer = GetComponent<Renderer>();
     }
 
     public void PutIn(Food food)
     {
-        Debug.Log($"Put food into Storage. Elements in container: {foodStored.Count}");
         foodStored.Push(food);
+        Debug.Log($"Put food into Storage. Elements in container: {foodStored.Count}");
 
         SetColor();
     }
 
     public Food TakeOut()
     {
+        if (foodStored.Count == 0) return null;
         Food item = foodStored.Pop();
+        Debug.Log($"Took food out of Storage. Elements in container: {foodStored.Count}");
         SetColor();
         return item;
     }
 
     public bool Empty => foodStored.Count == 0;
+
+    public override ObjectType Type => ObjectType.FOOD; //TODO change
+
     public bool CanTake(Food item) => foodStored.Count < capacity;
 
     #region DEBUG

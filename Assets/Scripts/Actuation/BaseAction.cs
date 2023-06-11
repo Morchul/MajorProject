@@ -4,6 +4,7 @@ public abstract class BaseAction : IAction
 {
     public abstract int Layer { get; }
     public abstract string Name { get; }
+    public abstract int ID { get; }
 
     public virtual int ActionUsage => 0;
 

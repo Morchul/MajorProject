@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class PickUpAction : SmartObjectAction
 {
-    private readonly ISmartItem item;
-    public PickUpAction(ISmartItem item, Action onExecute) : base(onExecute)
+    private readonly ISmartObject item;
+    public PickUpAction(ISmartObject item, Action onExecute) : base(onExecute)
     {
         this.item = item;
     }
 
     public override int Layer => 0;
-
+    public override int ID => ActionIDs.PICK_UP;
     public override string Name => "Pick up";
 
     public override void Execute(Entity entity)

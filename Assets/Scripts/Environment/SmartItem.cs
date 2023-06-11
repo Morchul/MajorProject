@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SmartObject : MonoBehaviour, ISmartObject
+public abstract class SmartItem : ISmartObject
 {
     protected IAction[] actions;
 
@@ -10,7 +10,7 @@ public abstract class SmartObject : MonoBehaviour, ISmartObject
 
     public bool TryGetAction(int actionID, out IAction action)
     {
-        for (int i = 0; i < actions.Length; ++i)
+        for(int i = 0; i < actions.Length; ++i)
         {
             if (actions[i].ID == actionID)
             {

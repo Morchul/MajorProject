@@ -610,9 +610,12 @@ GameObject:
   - component: {fileID: 1766938277}
   - component: {fileID: 1766938276}
   - component: {fileID: 1766938275}
-  - component: {fileID: 1766938273}
   - component: {fileID: 1766938274}
+  - component: {fileID: 1766938273}
   - component: {fileID: 1766938272}
+  - component: {fileID: 1766938280}
+  - component: {fileID: 1766938279}
+  - component: {fileID: 1766938278}
   m_Layer: 0
   m_Name: Human
   m_TagString: Untagged
@@ -632,6 +635,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c658797ff71d894bab14c5b199f9ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hunger: {fileID: 1766938278}
+  carry: {fileID: 1766938279}
   TargetFood: {fileID: 0}
   FoodContainer: {fileID: 0}
   MoveTarget: {x: 0, y: 0, z: 0}
@@ -725,6 +730,46 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1766938278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766938271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929a7e66340563740bcd4c062ec560a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Food: 100
+--- !u!114 &1766938279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766938271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f574b11986577458a6370b40ec651b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsNull: 0
+--- !u!114 &1766938280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766938271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d88e74228f157294ab2dc0e437b85d53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveSpeed: 5
+  TurnSpeed: 100
 --- !u!1 &1959246467
 GameObject:
   m_ObjectHideFlags: 0

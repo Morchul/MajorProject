@@ -34,9 +34,15 @@ public class BTMoveTo : AbstractBTNode
         if(dotProduct < 0.99f)
         {
             if (crossProduct.y > 0)
+            {
                 human.AddAction(turnRight);
+                turnLeft.Interrupt();
+            }
             else
+            {
                 human.AddAction(turnLeft);
+                turnRight.Interrupt();
+            }
         }
         else
         {

@@ -13,7 +13,8 @@ public class HumanAI : AI
     private Human agent;
 
     [Header("Blackboard")]
-    public Food TargetFood;
+    public ISmartObject TargetObject;
+    //public Food TargetFood;
     public FoodContainer FoodContainer;
 
     public Vector3 MoveTarget;
@@ -27,9 +28,21 @@ public class HumanAI : AI
         BTMoveTo moveTo = new BTMoveTo(agent, this);
         moveTo.MaxDistanceSqrt = 4;
 
-        AbstractBTNode eatAction = new BTEat(agent, this);
-        BTLocateFood locateNearbyFood = new BTLocateFood(this);
-        BTGetFoodFromContainer getFoodFromContainer = new BTGetFoodFromContainer(this);
+        static AbstractBTNode.BTStatus SuccessToRunning(AbstractBTNode.BTStatus status)
+        {
+            if (status == AbstractBTNode.BTStatus.SUCCESS) return AbstractBTNode.BTStatus.RUNNING;
+            return status;
+        }
+
+        BTNode takeOutFromStorage = new BTNode(() =>
+        {
+            if (FoodContainer.TryGetAction(ActionIDs.TAKE_OUT, out IAction action))
+            {
+                agent.AddAction(action);
+                return AbstractBTNode.BTStatus.SUCCESS;
+            }
+            return AbstractBTNode.BTStatus.FAILURE;
+        });
 
         BTNode selectFoodContainer = new BTNode(() =>
         {
@@ -38,48 +51,63 @@ public class HumanAI : AI
             return (FoodContainer == null) ? AbstractBTNode.BTStatus.FAILURE : AbstractBTNode.BTStatus.SUCCESS;
         });
 
-        BTNode takeFoodFromStorage = new BTNode(() =>
-        {
-            TargetFood = FoodContainer.TakeOut();
-            if (TargetFood == null) return AbstractBTNode.BTStatus.FAILURE;
-            return AbstractBTNode.BTStatus.SUCCESS;
-        });
-
-        BTSequence eatFoodFromContainer = new BTSequence(selectFoodContainer, moveTo, takeFoodFromStorage, eatAction);
-        BTSequence eatNearbyFoodSequence = new BTSequence(locateNearbyFood, moveTo, eatAction);
-        BTSelector locateFood = new BTSelector(eatNearbyFoodSequence, eatFoodFromContainer);
-        IPlan eatPlan = new BTRoot(locateFood, this);
-
         BTNode pickUpFood = new BTNode(() =>
         {
-            agent.AddAction(TargetFood.PickUpAction);
+            agent.AddAction(TargetObject.GetAction(ActionIDs.PICK_UP));
+            TargetObject = null;
             return AbstractBTNode.BTStatus.SUCCESS;
         });
 
-        BTSequence getFood = new BTSequence(locateNearbyFood, moveTo, pickUpFood);
+        BTNode locateNearbyFood = new BTNode(() =>
+        {
+            Food food = BTFindSomething.SearchClosest<Food>("Food", transform.position, 10);
+            if(food != null)
+            {
+                MoveTarget = food.transform.position;
+                TargetObject = food;
+                return AbstractBTNode.BTStatus.SUCCESS;
+            }
 
-        AbstractBTNode pickRandomCloseSpot = new BTPickRandomSpot(this);
-        AbstractBTNode removeMoveTo = new BTNode(() => { MoveTarget = Vector3.zero; return AbstractBTNode.BTStatus.SUCCESS; });
-
-        BTSequence moveAroundSequence = new BTSequence(pickRandomCloseSpot, moveTo, removeMoveTo);
-
-        IPlan moveAroundPlan = new BTRoot(moveAroundSequence, this);
-
-        Decision eatDecision = new Decision(eatPlan, () => 1 - (hunger.Food / 100)); //Linear utility, depending on how much food left
-        Decision moveAround = new Decision(moveAroundPlan, () => 0.5f);
-
-
-        #region GatherFood and put it in storage container
+            return AbstractBTNode.BTStatus.FAILURE;
+        });
+        BTNode eatFoodInHand = new BTNode(() =>
+        {
+            if (carry.CarriedItem != null && carry.CarriedItem.TryGetAction(ActionIDs.EAT, out IAction action))
+            {
+                agent.AddAction(action);
+                carry.CarriedItem = null;
+                return AbstractBTNode.BTStatus.SUCCESS;
+            }
+            return AbstractBTNode.BTStatus.FAILURE;
+        });
 
         BTNode putIntoStorage = new BTNode(() =>
         {
-            agent.AddAction(FoodContainer.PutInAction);
+            agent.AddAction(FoodContainer.GetAction(ActionIDs.PUT_IN));
             return AbstractBTNode.BTStatus.SUCCESS;
         });
 
-        BTSequence deliverFood = new BTSequence(selectFoodContainer, moveTo, putIntoStorage);
-        BTDecorator nothingInHandDecorator = new BTDecorator(getFood, (_) => carry.CarriedItem == null ? AbstractBTNode.BTStatus.SUCCESS : AbstractBTNode.BTStatus.FAILURE);
-        BTSelector gatherFoodSelector = new BTSelector(nothingInHandDecorator, deliverFood);
+        BTNode hasFood = new BTNode(() =>
+        {
+            return (carry.CarriedItem != null) ? AbstractBTNode.BTStatus.SUCCESS : AbstractBTNode.BTStatus.FAILURE;
+        });
+
+        BTSequence pickUpNearbyFoodSequence = new BTSequence(locateNearbyFood, moveTo, pickUpFood);
+        BTDecorator successToRunningDec1 = new BTDecorator(pickUpNearbyFoodSequence, SuccessToRunning);
+
+        #region Hungry, eat food
+        BTSequence takeFoodFromStorage = new BTSequence(selectFoodContainer, moveTo, takeOutFromStorage);
+        BTDecorator successToRunningDec2 = new BTDecorator(takeFoodFromStorage, SuccessToRunning);
+
+        BTSelector eatSelector = new BTSelector(eatFoodInHand, successToRunningDec1, successToRunningDec2);
+        IPlan eatFoodPlan = new BTRoot(eatSelector, this);
+        Decision eatDecision = new Decision(eatFoodPlan, () => 1 - (hunger.Food / 100)); //Linear utility, depending on how much food left
+        #endregion
+
+        #region GatherFood
+        BTSequence putFoodIntoStorage = new BTSequence(hasFood, selectFoodContainer, moveTo, putIntoStorage);
+
+        BTSelector gatherFoodSelector = new BTSelector(putFoodIntoStorage, successToRunningDec1);
         IPlan gatherFoodPlan = new BTRoot(gatherFoodSelector, this);
         Decision gatherFoodDecision = new Decision(gatherFoodPlan, () => 0.6f);
         #endregion

@@ -66,8 +66,6 @@ public abstract class Entity : MonoBehaviour
         }
         else
         {
-            Debug.Log("Add new action: " + nextAction.Name);
-
             ringBuffer.Add(nextAction);
             nextAction.Execute(this);
         }

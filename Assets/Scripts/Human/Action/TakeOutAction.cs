@@ -12,8 +12,8 @@ public class TakeOutAction : SmartObjectAction
     }
 
     public override int Layer => 0;
-
     public override string Name => "Take out";
+    public override int ID => ActionIDs.TAKE_OUT;
 
     public override void Execute(Entity entity)
     {

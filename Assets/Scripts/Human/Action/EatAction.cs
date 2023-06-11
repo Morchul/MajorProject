@@ -8,6 +8,8 @@ public class EatAction : SmartObjectAction
 
     public override string Name => "Eat";
 
+    public override int ID => ActionIDs.EAT;
+
     private readonly float amount;
 
     public EatAction(float amount, System.Action onExecute) : base(onExecute)
