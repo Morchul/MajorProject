@@ -3,7 +3,8 @@ using UnityEngine;
 public abstract class AI : MonoBehaviour
 {
     protected ISensor sensor;
-    protected IPlan currentPlan;
+
+    protected IDecision currentDecision;
 
     protected virtual void Start()
     {
@@ -13,13 +14,16 @@ public abstract class AI : MonoBehaviour
     public void MakeNewDecision()
     {
         if(sensor != null)
-            currentPlan = sensor.MakeDecision();
+        {
+            currentDecision = sensor.MakeDecision();
+            //Debug.Log($"Next decision: {currentDecision}");
+        }
     }
 
     private void Update()
     {
         sensor.Update();
-        if(currentPlan != null)
-            currentPlan.Update();
+        if(currentDecision != null)
+            currentDecision.Update();
     }
 }

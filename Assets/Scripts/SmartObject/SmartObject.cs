@@ -13,20 +13,37 @@ public class SmartObject : Entity, ISmartObject
 
     protected ActionContainer[] actions;
 
+    public event System.Action OnObjectStateChange;
 
     private void OnDestroy()
     {
         foreach (ActionContainer container in actions) container.Clear();
     }
 
-    protected virtual void Start()
+    public void SetToItem()
     {
-        actions = new ActionContainer[actionComponents.Length];
-        for(int i = 0; i < actionComponents.Length; ++i)
+        gameObject.SetActive(false);
+        OnObjectStateChange?.Invoke();
+        //OnObjectStateChange = null; everyone who wants to keep listening has to reassign but it is better if most of them won't continue to listen.
+    }
+
+    protected override void Awake()
+    {
+        //base.Awake();
+        List<ActionComponent> actionComp = new List<ActionComponent>(actionComponents);
+        SmartObjectComponent[] smartObjectComponents = GetComponents<SmartObjectComponent>();
+        components = new EntityComponent[smartObjectComponents.Length];
+        for(int i = 0; i < smartObjectComponents.Length; ++i)
         {
-            actions[i] = new ActionContainer(this, actionComponents[i]);
+            actionComp.AddRange(smartObjectComponents[i].GetComponentActions());
+            components[i] = smartObjectComponents[i];
         }
-        base.Awake();
+
+        actions = new ActionContainer[actionComp.Count];
+        for(int i = 0; i < actionComp.Count; ++i)
+        {
+            actions[i] = new ActionContainer(this, actionComp[i]);
+        }
     }
 
     public bool TryGetAction(ActionID actionID, out IAction action)

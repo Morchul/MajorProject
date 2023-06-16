@@ -11,6 +11,8 @@ public class BTPickRandomSpot : AbstractBTNode
         this.ai = ai;
     }
 
+    public override void CleanUp() { }
+
     public override BTStatus Tick()
     {
         if(ai.MoveTarget == Vector3.zero)

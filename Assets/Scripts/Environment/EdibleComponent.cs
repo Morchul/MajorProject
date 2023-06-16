@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUpComponent : SmartObjectComponent
+public class EdibleComponent : SmartObjectComponent
 {
-    public SmartObject Item;
+    public float Amount;
 
-    public override int ID => ComponentIDs.PICK_UP;
+    public override int ID => ComponentIDs.EDIBLE;
 
     public override ActionComponent[] GetComponentActions()
     {
@@ -14,7 +14,7 @@ public class PickUpComponent : SmartObjectComponent
         {
             new ActionComponent()
             {
-                ActionID = ActionID.PICK_UP,
+                ActionID = ActionID.EAT,
                 MaxContainerSize = 0,
                 StartContainerSize = 0
             }

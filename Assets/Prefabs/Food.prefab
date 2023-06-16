@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4360976729514497297}
   - component: {fileID: 4360976729514497296}
   - component: {fileID: 4360976729514497303}
-  - component: {fileID: -4941913493565252080}
   - component: {fileID: 4925192178318244442}
   - component: {fileID: 4083460529492801129}
+  - component: {fileID: 5334522113960324617}
   m_Layer: 0
   m_Name: Food
   m_TagString: Food
@@ -98,19 +98,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-4941913493565252080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4360976729514497301}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc4ea3437ac3f434db137e272e28abef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Amount: 6
 --- !u!114 &4925192178318244442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,13 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  actionComponents:
-  - ActionID: 0
-    MaxContainerSize: 0
-    StartContainerSize: 0
-  - ActionID: 4
-    MaxContainerSize: 0
-    StartContainerSize: 0
+  actionComponents: []
 --- !u!114 &4083460529492801129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,4 +124,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa1a1ccc3ab3cc947b8beaf3f9b03c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemComponent: 0
   Item: {fileID: 4925192178318244442}
+--- !u!114 &5334522113960324617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360976729514497301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80644d363ac6e9942bbaeaf62de6dc38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemComponent: 1
+  Amount: 6

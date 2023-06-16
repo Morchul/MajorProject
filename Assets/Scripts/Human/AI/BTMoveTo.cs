@@ -68,4 +68,11 @@ public class BTMoveTo : AbstractBTNode
         else
             return BTStatus.RUNNING;
     }
+
+    public override void CleanUp()
+    {
+        turnRight.Interrupt();
+        turnLeft.Interrupt();
+        moveForward.Interrupt();
+    }
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -502,9 +502,8 @@ GameObject:
   - component: {fileID: 1340574615}
   - component: {fileID: 1340574614}
   - component: {fileID: 1340574613}
-  - component: {fileID: 1340574612}
   - component: {fileID: 1340574617}
-  - component: {fileID: 1340574618}
+  - component: {fileID: 1340574612}
   m_Layer: 0
   m_Name: FoodContainer
   m_TagString: FoodContainer
@@ -521,17 +520,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1340574611}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f26c9ae831ee74a4ca0e7f9dacbf16bf, type: 3}
+  m_Script: {fileID: 11500000, guid: 984a9f35157aaac408d4c97726b6e18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  actionComponents:
-  - ActionID: 5
-    MaxContainerSize: 1
-    StartContainerSize: 1
-  - ActionID: 6
-    MaxContainerSize: 1
-    StartContainerSize: 1
+  actionComponents: []
 --- !u!65 &1340574613
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -620,20 +613,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211562ffef0368746bd6d3e9fc25d5de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemComponent: 0
   capacity: 10
---- !u!114 &1340574618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1340574611}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa1a1ccc3ab3cc947b8beaf3f9b03c3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Item: {fileID: 1340574612}
 --- !u!1 &1527751686
 GameObject:
   m_ObjectHideFlags: 0

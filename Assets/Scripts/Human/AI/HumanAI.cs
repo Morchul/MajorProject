@@ -13,13 +13,13 @@ public class HumanAI : AI
     private Human agent;
 
     [Header("Blackboard")]
-    public ISmartObject TargetObject;
+    private SmartObject TargetObject;
     //public Food TargetFood;
-    public FoodContainer FoodContainer;
+    public SmartObject FoodContainer;
 
     public Vector3 MoveTarget;
 
-    private void Start()
+    protected override void Start()
     {
         agent = GetComponent<Human>();
 
@@ -46,29 +46,52 @@ public class HumanAI : AI
 
         BTNode selectFoodContainer = new BTNode(() =>
         {
-            FoodContainer = BTFindSomething.SearchClosest<FoodContainer>("FoodContainer", transform.position, 10);
-            MoveTarget = FoodContainer.transform.position;
-            return (FoodContainer == null) ? AbstractBTNode.BTStatus.FAILURE : AbstractBTNode.BTStatus.SUCCESS;
+            if(FoodContainer == null)
+            {
+                FoodContainer = BTFindSomething.SearchClosest<SmartObject>("FoodContainer", transform.position, 10);
+            }
+            
+            if(FoodContainer != null)
+            {
+                MoveTarget = FoodContainer.transform.position;
+                return AbstractBTNode.BTStatus.SUCCESS;
+            }
+
+            return AbstractBTNode.BTStatus.FAILURE;
         });
 
-        BTNode pickUpFood = new BTNode(() =>
+        BTNode pickUpTargetObject = new BTNode(() =>
         {
-            agent.AddAction(TargetObject.GetAction(ActionID.PICK_UP));
+            IAction pickUpAction = TargetObject.GetAction(ActionID.PICK_UP);
+
+            if (pickUpAction == null)
+            {
+                Debug.Log("Can't pick up: " + TargetObject.name);
+                TargetObject = null;
+                return AbstractBTNode.BTStatus.FAILURE;
+            }
             TargetObject = null;
+
+            agent.AddAction(pickUpAction);
             return AbstractBTNode.BTStatus.SUCCESS;
         });
 
         BTNode locateNearbyFood = new BTNode(() =>
         {
-            SmartObject food = BTFindSomething.SearchClosest<SmartObject>("Food", transform.position, 10);
-            if(food != null)
-            {
-                MoveTarget = food.transform.position;
-                TargetObject = food;
-                return AbstractBTNode.BTStatus.SUCCESS;
-            }
+            //if(TargetObject == null)
+            //{
+                SmartObject food = BTFindSomething.SearchClosest<SmartObject>("Food", transform.position, 10);
+                if (food != null)
+                {
+                    MoveTarget = food.transform.position;
+                    TargetObject = food;
+                    return AbstractBTNode.BTStatus.SUCCESS;
+                }
+                return AbstractBTNode.BTStatus.FAILURE;
+            //}
 
-            return AbstractBTNode.BTStatus.FAILURE;
+            //return AbstractBTNode.BTStatus.SUCCESS;
+            
         });
         BTNode eatFoodInHand = new BTNode(() =>
         {
@@ -92,7 +115,7 @@ public class HumanAI : AI
             return (carry.CarriedItem != null) ? AbstractBTNode.BTStatus.SUCCESS : AbstractBTNode.BTStatus.FAILURE;
         });
 
-        BTSequence pickUpNearbyFoodSequence = new BTSequence(locateNearbyFood, moveTo, pickUpFood);
+        BTSequence pickUpNearbyFoodSequence = new BTSequence(locateNearbyFood, moveTo, pickUpTargetObject);
         BTDecorator successToRunningDec1 = new BTDecorator(pickUpNearbyFoodSequence, SuccessToRunning);
 
         #region Hungry, eat food
@@ -101,7 +124,7 @@ public class HumanAI : AI
 
         BTSelector eatSelector = new BTSelector(eatFoodInHand, successToRunningDec1, successToRunningDec2);
         IPlan eatFoodPlan = new BTRoot(eatSelector, this);
-        Decision eatDecision = new Decision(eatFoodPlan, () => 1 - (hunger.Food / 100)); //Linear utility, depending on how much food left
+        Decision eatDecision = new Decision(eatFoodPlan, (_) => 1 - (hunger.Food / 100)); //Linear utility, depending on how much food left
         #endregion
 
         #region GatherFood
@@ -109,10 +132,8 @@ public class HumanAI : AI
 
         BTSelector gatherFoodSelector = new BTSelector(putFoodIntoStorage, successToRunningDec1);
         IPlan gatherFoodPlan = new BTRoot(gatherFoodSelector, this);
-        Decision gatherFoodDecision = new Decision(gatherFoodPlan, () => 0.6f);
+        Decision gatherFoodDecision = new Decision(gatherFoodPlan, (lastPlanRun) => 0.6f + 0.2f * (int)lastPlanRun);
         #endregion
-
-
 
         State idleState = new State();
         idleState.AddTransaction(hungry);
@@ -126,5 +147,10 @@ public class HumanAI : AI
         sensor = stateMachine;
 
         stateMachine.SetState(idleState);
+    }
+
+    private IDecision CreateEatDecision()
+    {
+        return null;
     }
 }

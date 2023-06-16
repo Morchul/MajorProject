@@ -10,6 +10,11 @@ public abstract class AbstractBTDecorator : AbstractBTNode
     {
         this.child = child;
     }
+
+    public override void CleanUp()
+    {
+        child.CleanUp();
+    }
 }
 
 public class BTDecorator : AbstractBTDecorator

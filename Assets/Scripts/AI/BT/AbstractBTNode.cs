@@ -1,6 +1,7 @@
 public abstract class AbstractBTNode
 {
     public abstract BTStatus Tick();
+    public abstract void CleanUp();
 
     public enum BTStatus
     {
@@ -18,6 +19,8 @@ public class BTNode : AbstractBTNode
     {
         TickMethod = tickMethod;
     }
+
+    public override void CleanUp() { }
 
     public override BTStatus Tick() => TickMethod();
 }

@@ -9,8 +9,8 @@ public static class BTFindSomething
         Collider[] colliders = Physics.OverlapSphere(pos, radius);
         if (colliders.Length > 0)
         {
-            int closestIndex = 0;
-            float closestDistanceSqrt = 100_000;
+            int closestIndex = -1;
+            float closestDistanceSqrt = radius * radius + 1;
             for (int i = 0; i < colliders.Length; ++i)
             {
                 if (!colliders[i].CompareTag(tag)) continue;
@@ -23,7 +23,8 @@ public static class BTFindSomething
                 }
             }
 
-            return colliders[closestIndex].GetComponent<T>();
+            if(closestIndex > -1)
+                return colliders[closestIndex].GetComponent<T>();
         }
         return default;
     }

@@ -6,4 +6,10 @@ public abstract class BTComposite : AbstractBTNode
     {
         this.children = children;
     }
+
+    public override void CleanUp()
+    {
+        foreach (AbstractBTNode child in children)
+            child.CleanUp();
+    }
 }

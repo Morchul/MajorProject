@@ -10,11 +10,11 @@ public class EatAction : BaseAction
 
     public override ActionID ID => ActionID.EAT;
 
-    private Eatable eatable;
+    private EdibleComponent eatable;
 
     public override void Init(Entity entity)
     {
-        eatable = entity.GetComponent<Eatable>(ComponentIDs.EATABLE);
+        eatable = entity.GetComponent<EdibleComponent>(ComponentIDs.EDIBLE);
     }
 
     public override void Execute(Entity entity)

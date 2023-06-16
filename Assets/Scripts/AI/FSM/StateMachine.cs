@@ -17,7 +17,7 @@ public class StateMachine : ISensor
         ai.MakeNewDecision();
     }
 
-    public IPlan MakeDecision()
+    public IDecision MakeDecision()
     {
         //Selects the decision with the highest utility. Absolute Utility approach
         List<IDecision> decisions = currentState.GetDecisions();
@@ -35,7 +35,7 @@ public class StateMachine : ISensor
             }
         }
 
-        return decisions[maxIndex].GetPlan();
+        return decisions[maxIndex];
     }
 
     public void Update()

@@ -23,4 +23,6 @@ public static class Extensions
 
     public static bool IsActive(this IAction action) => action.Status < ActionState.SLEEPING;
     public static bool IsInactive(this IAction action) => action.Status > ActionState.FINISHED;
+
+    public static PlanState GetPlanState(this AbstractBTNode.BTStatus status) => (status == AbstractBTNode.BTStatus.FAILURE) ? PlanState.FAILURE : PlanState.SUCCESSFUL;
 }
