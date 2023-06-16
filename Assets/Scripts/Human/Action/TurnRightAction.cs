@@ -6,7 +6,7 @@ public class TurnRightAction : BaseAction
 {
     public override int Layer => 0;
     public override string Name => "Turn right";
-    public override int ID => ActionIDs.TURN_RIGHT;
+    public override ActionID ID => ActionID.TURN_RIGHT;
 
     private Entity human;
     private MoveComponent moveComponent;
@@ -34,7 +34,7 @@ public class TurnLeftAction : BaseAction
 {
     public override int Layer => 0;
     public override string Name => "Turn left";
-    public override int ID => ActionIDs.TURN_LEFT;
+    public override ActionID ID => ActionID.TURN_LEFT;
 
     private Entity human;
     private MoveComponent moveComponent;

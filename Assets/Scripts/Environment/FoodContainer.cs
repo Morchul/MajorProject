@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class FoodContainer : SmartObject, IContainer<Food>
+public class FoodContainer : SmartObject
 {
-    public Stack<Food> foodStored;
+    /*public Stack<Food> foodStored;
 
     [SerializeField]
     private int capacity;
@@ -12,11 +12,12 @@ public class FoodContainer : SmartObject, IContainer<Food>
     private Renderer renderer;
     #endregion
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         foodStored = new Stack<Food>();
 
-        actions = new IAction[] { new PutInAction(this, null), new TakeOutAction(this, null) };
+        //actions = new IAction[] { new PutInAction(this), new TakeOutAction(this) };
 
         renderer = GetComponent<Renderer>();
     }
@@ -46,5 +47,5 @@ public class FoodContainer : SmartObject, IContainer<Food>
 
     #region DEBUG
     private void SetColor() => renderer.material.color = new Color(0, (float)foodStored.Count / capacity, 0);
-    #endregion
+    #endregion*/
 }

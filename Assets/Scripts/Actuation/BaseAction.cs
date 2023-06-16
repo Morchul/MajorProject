@@ -1,19 +1,26 @@
+using System;
 using UnityEngine;
 
 public abstract class BaseAction : IAction
 {
     public abstract int Layer { get; }
     public abstract string Name { get; }
-    public abstract int ID { get; }
+    public abstract ActionID ID { get; }
 
     public virtual int ActionUsage => 0;
+    public event Action OnInactive;
 
     public BaseAction()
     {
         status = ActionState.INACTIVE;
     }
 
+    public virtual void Init(Entity entity){}
+    public virtual void Update() { }
+    public virtual void Execute(Entity entity) { }
+
     private ActionState status;
+
     public ActionState Status
     { 
         get => status;
@@ -21,6 +28,7 @@ public abstract class BaseAction : IAction
         {
             Debug.Log("Set status of action " + Name + " to: " + value);
             status = value;
+            if (status == ActionState.INACTIVE) OnInactive?.Invoke();
         }
     }
 
@@ -30,6 +38,8 @@ public abstract class BaseAction : IAction
             Status = ActionState.INTERRUPTED;
     }
 
-    public abstract void Execute(Entity entity);
-    public abstract void Update();
+    public void Return()
+    {
+        OnInactive = null;
+    }
 }

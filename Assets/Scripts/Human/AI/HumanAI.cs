@@ -19,7 +19,7 @@ public class HumanAI : AI
 
     public Vector3 MoveTarget;
 
-    private void Awake()
+    private void Start()
     {
         agent = GetComponent<Human>();
 
@@ -36,7 +36,7 @@ public class HumanAI : AI
 
         BTNode takeOutFromStorage = new BTNode(() =>
         {
-            if (FoodContainer.TryGetAction(ActionIDs.TAKE_OUT, out IAction action))
+            if (FoodContainer.TryGetAction(ActionID.TAKE_OUT, out IAction action))
             {
                 agent.AddAction(action);
                 return AbstractBTNode.BTStatus.SUCCESS;
@@ -53,14 +53,14 @@ public class HumanAI : AI
 
         BTNode pickUpFood = new BTNode(() =>
         {
-            agent.AddAction(TargetObject.GetAction(ActionIDs.PICK_UP));
+            agent.AddAction(TargetObject.GetAction(ActionID.PICK_UP));
             TargetObject = null;
             return AbstractBTNode.BTStatus.SUCCESS;
         });
 
         BTNode locateNearbyFood = new BTNode(() =>
         {
-            Food food = BTFindSomething.SearchClosest<Food>("Food", transform.position, 10);
+            SmartObject food = BTFindSomething.SearchClosest<SmartObject>("Food", transform.position, 10);
             if(food != null)
             {
                 MoveTarget = food.transform.position;
@@ -72,7 +72,7 @@ public class HumanAI : AI
         });
         BTNode eatFoodInHand = new BTNode(() =>
         {
-            if (carry.CarriedItem != null && carry.CarriedItem.TryGetAction(ActionIDs.EAT, out IAction action))
+            if (carry.CarriedItem != null && carry.CarriedItem.TryGetAction(ActionID.EAT, out IAction action))
             {
                 agent.AddAction(action);
                 carry.CarriedItem = null;
@@ -83,7 +83,7 @@ public class HumanAI : AI
 
         BTNode putIntoStorage = new BTNode(() =>
         {
-            agent.AddAction(FoodContainer.GetAction(ActionIDs.PUT_IN));
+            agent.AddAction(FoodContainer.GetAction(ActionID.PUT_IN));
             return AbstractBTNode.BTStatus.SUCCESS;
         });
 

@@ -20,7 +20,7 @@ public class BTGetFoodFromContainer : AbstractBTNode
     {
         if (knownFoodContainer.Count > 0)
         {
-            if(!knownFoodContainer[0].Empty)
+            //if(!knownFoodContainer[0].Empty)
             {
                 ai.MoveTarget = knownFoodContainer[0].transform.position;
                 return BTStatus.SUCCESS;

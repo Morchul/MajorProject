@@ -3,25 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TakeOutAction : SmartObjectAction
+public class TakeOutAction : BaseAction
 {
-    private readonly IContainer<Food> container;
-    public TakeOutAction(IContainer<Food> container, Action onExecute) : base(onExecute)
+    private ContainerComponent container;
+
+    public override void Init(Entity entity)
     {
-        this.container = container;
+        container = entity.GetComponent<ContainerComponent>(ComponentIDs.CONTAINER);
     }
 
     public override int Layer => 0;
     public override string Name => "Take out";
-    public override int ID => ActionIDs.TAKE_OUT;
+    public override ActionID ID => ActionID.TAKE_OUT;
 
     public override void Execute(Entity entity)
     {
         entity.GetComponent<CarryComponent>(ComponentIDs.CARRY).CarriedItem = container.TakeOut();
         Status = ActionState.FINISHED;
-        base.Execute(entity);
     }
 
     public override void Update()
-    {}
+    { }
 }

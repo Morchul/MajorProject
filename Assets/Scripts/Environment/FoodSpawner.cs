@@ -5,7 +5,7 @@ using UnityEngine;
 public class FoodSpawner : MonoBehaviour
 {
     [SerializeField]
-    private Food foodPrefab;
+    private SmartObject foodPrefab;
 
     [SerializeField]
     private float interval;

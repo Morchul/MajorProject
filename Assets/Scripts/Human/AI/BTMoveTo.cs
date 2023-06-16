@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BTMoveTo : AbstractBTNode
 {
-    private readonly MoveForward moveForward;
-    private readonly TurnRightAction turnRight;
-    private readonly TurnLeftAction turnLeft;
+    private readonly IAction moveForward;
+    private readonly IAction turnRight;
+    private readonly IAction turnLeft;
 
     private readonly Human human;
     private readonly HumanAI ai;
@@ -18,9 +18,12 @@ public class BTMoveTo : AbstractBTNode
         this.human = human;
         this.ai = ai;
 
-        moveForward = new MoveForward();
-        turnRight = new TurnRightAction();
-        turnLeft = new TurnLeftAction();
+        moveForward = GlobalActionFactory.GetAction(ActionID.MOVE_FORWARD, false);
+        turnLeft = GlobalActionFactory.GetAction(ActionID.TURN_LEFT, false);
+        turnRight = GlobalActionFactory.GetAction(ActionID.TURN_RIGHT, false);
+        moveForward.Init(human);
+        turnRight.Init(human);
+        turnLeft.Init(human);
     }
 
     public override BTStatus Tick()

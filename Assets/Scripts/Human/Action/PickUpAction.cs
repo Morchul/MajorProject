@@ -3,23 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUpAction : SmartObjectAction
+public class PickUpAction : BaseAction
 {
-    private readonly ISmartObject item;
-    public PickUpAction(ISmartObject item, Action onExecute) : base(onExecute)
-    {
-        this.item = item;
-    }
-
+    private PickUpComponent pickUpComponent;
+    
     public override int Layer => 0;
-    public override int ID => ActionIDs.PICK_UP;
+    public override ActionID ID => ActionID.PICK_UP;
     public override string Name => "Pick up";
+
+    public override void Init(Entity entity)
+    {
+        pickUpComponent = entity.GetComponent<PickUpComponent>(ComponentIDs.PICK_UP);
+    }
 
     public override void Execute(Entity entity)
     {
-        entity.GetComponent<CarryComponent>(ComponentIDs.CARRY).CarriedItem = item;
+        entity.GetComponent<CarryComponent>(ComponentIDs.CARRY).CarriedItem = pickUpComponent.Item;
+        pickUpComponent.gameObject.SetActive(false);
         Status = ActionState.FINISHED;
-        base.Execute(entity);
     }
 
     public override void Update()
