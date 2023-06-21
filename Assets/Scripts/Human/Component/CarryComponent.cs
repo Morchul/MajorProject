@@ -9,8 +9,8 @@ public class CarryComponent : EntityComponent
     //ONLY FOR DEBUG
     public bool IsNull;
 
-    private ISmartObject tmp;
-    public ISmartObject CarriedItem
+    private SmartObject tmp;
+    public SmartObject CarriedItem
     {
         get => tmp;
         set
@@ -23,4 +23,6 @@ public class CarryComponent : EntityComponent
     {
         IsNull = CarriedItem == null;
     }
+
+    public override ActionComponent[] GetComponentActions() => null;
 }

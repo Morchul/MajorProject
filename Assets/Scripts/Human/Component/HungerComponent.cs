@@ -12,4 +12,6 @@ public class HungerComponent : EntityComponent
     {
         Food -= Time.deltaTime;
     }
+
+    public override ActionComponent[] GetComponentActions() => null;
 }

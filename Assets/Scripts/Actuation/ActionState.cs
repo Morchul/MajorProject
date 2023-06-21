@@ -1,12 +1,14 @@
 public enum ActionID : int
 {
+    //REMEMBER TO ADD A FACTURY!!!
     EAT,
     MOVE_FORWARD,
     TURN_RIGHT,
     TURN_LEFT,
     PICK_UP,
     PUT_IN,
-    TAKE_OUT
+    TAKE_OUT,
+    ATTACK
 }
 
 public enum ActionState

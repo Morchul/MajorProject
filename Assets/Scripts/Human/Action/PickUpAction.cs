@@ -20,7 +20,7 @@ public class PickUpAction : BaseAction
     {
         entity.GetComponent<CarryComponent>(ComponentIDs.CARRY).CarriedItem = pickUpComponent.Item;
         pickUpComponent.gameObject.SetActive(false);
-        Status = ActionState.FINISHED;
+        ActionFinished();
     }
 
     public override void Update()

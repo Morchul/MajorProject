@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class BaseAction : IAction
+public abstract class BaseAction : IEntityAction
 {
     public abstract int Layer { get; }
     public abstract string Name { get; }
@@ -26,7 +26,7 @@ public abstract class BaseAction : IAction
         get => status;
         set
         {
-            //Debug.Log("Set status of action " + Name + " to: " + value);
+            Debug.Log("Set status of action " + Name + " to: " + value);
             status = value;
             if (status == ActionState.INACTIVE) OnInactive?.Invoke();
         }
@@ -38,8 +38,13 @@ public abstract class BaseAction : IAction
             Status = ActionState.INTERRUPTED;
     }
 
-    public void Return()
+    public void OnReturn()
     {
         OnInactive = null;
+    }
+
+    protected void ActionFinished()
+    {
+        Status = ActionState.FINISHED;
     }
 }

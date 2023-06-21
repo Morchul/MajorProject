@@ -7,6 +7,7 @@ public static class GlobalActionFactory
     public static ActionFactory PickUpFactory = new ActionFactory(() => new PickUpAction(), ActionID.PICK_UP);
     public static ActionFactory TakeOutFactory = new ActionFactory(() => new TakeOutAction(), ActionID.TAKE_OUT);
     public static ActionFactory PutInFactory = new ActionFactory(() => new PutInAction(), ActionID.PUT_IN);
+    public static ActionFactory AttackFactory = new ActionFactory(() => new AttackAction(), ActionID.ATTACK);
 
     public static ActionFactory GetFactory(ActionID actionID)
     {
@@ -19,16 +20,17 @@ public static class GlobalActionFactory
             ActionID.PICK_UP => PickUpFactory,
             ActionID.TAKE_OUT => TakeOutFactory,
             ActionID.PUT_IN => PutInFactory,
+            ActionID.ATTACK => AttackFactory,
             _ => null
         };
     }
 
-    public static IAction GetAction(ActionID actionID, bool returnWhenInactive)
+    public static IEntityAction GetAction(ActionID actionID, bool returnWhenInactive)
     {
         return GetFactory(actionID).GetAction(returnWhenInactive);
     }
 
-    public static void ReturnAction(IAction action)
+    public static void ReturnAction(IEntityAction action)
     {
         GetFactory(action.ID).ReturnAction(action);
     }

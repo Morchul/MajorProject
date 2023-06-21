@@ -7,13 +7,13 @@ public abstract class ContainerComponent : SmartObjectComponent
 
     public override int ID => ComponentIDs.CONTAINER;
 
-    public abstract void PutIn(ISmartObject obj);
+    public abstract void PutIn(SmartObject obj);
 
-    public abstract ISmartObject TakeOut();
+    public abstract SmartObject TakeOut();
 
     public abstract bool Empty { get; }
 
-    public abstract bool CanTake(ISmartObject item);
+    public abstract bool CanTake(SmartObject item);
 
     public override ActionComponent[] GetComponentActions()
     {

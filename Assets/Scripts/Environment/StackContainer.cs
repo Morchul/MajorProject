@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class StackContainer : ContainerComponent
 {
-    public Stack<ISmartObject> foodStored;
+    public Stack<SmartObject> foodStored;
 
     protected void Awake()
     {
-        foodStored = new Stack<ISmartObject>(capacity);
+        foodStored = new Stack<SmartObject>(capacity);
 
         #region DEBUG
         renderer = GetComponent<Renderer>();
         #endregion
     }
 
-    public override void PutIn(ISmartObject food)
+    public override void PutIn(SmartObject food)
     {
         foodStored.Push(food);
         #region DEBUG
@@ -24,10 +24,10 @@ public class StackContainer : ContainerComponent
         #endregion
     }
 
-    public override ISmartObject TakeOut()
+    public override SmartObject TakeOut()
     {
         if (foodStored.Count == 0) return null;
-        ISmartObject item = foodStored.Pop();
+        SmartObject item = foodStored.Pop();
         #region DEBUG
         Debug.Log($"Took food out of Storage. Elements in container: {foodStored.Count}");
         SetColor();
@@ -37,7 +37,7 @@ public class StackContainer : ContainerComponent
 
     public override bool Empty => foodStored.Count == 0;
 
-    public override bool CanTake(ISmartObject item) => foodStored.Count < capacity;
+    public override bool CanTake(SmartObject item) => foodStored.Count < capacity;
 
     #region DEBUG
     private Renderer renderer;

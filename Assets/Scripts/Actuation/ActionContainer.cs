@@ -9,7 +9,7 @@ public class ActionContainer
     private readonly ActionFactory factory;
     private readonly Entity entity;
 
-    private readonly List<IAction> localPool;
+    private readonly List<IEntityAction> localPool;
 
     public int MaxLocalPoolActions { get; set; }
 
@@ -20,25 +20,25 @@ public class ActionContainer
         this.entity = entity;
         factory = GlobalActionFactory.GetFactory(actionComponent.ActionID);
 
-        localPool = new List<IAction>(actionComponent.StartContainerSize);
+        localPool = new List<IEntityAction>(actionComponent.StartContainerSize);
 
         MaxLocalPoolActions = actionComponent.MaxContainerSize;
         for (int i = 0; i < actionComponent.StartContainerSize; ++i)
         {
-            IAction action = factory.GetAction(false);
+            IEntityAction action = factory.GetAction(false);
             action.Init(entity);
             localPool.Add(action);
         }
     }
 
-    public IAction GetAction()
+    public IEntityAction GetAction()
     {
-        foreach(IAction localAction in localPool)
+        foreach(IEntityAction localAction in localPool)
             if (localAction.Status == ActionState.INACTIVE)
                 return localAction;
 
         bool directReturn = localPool.Count == MaxLocalPoolActions;
-        IAction action = factory.GetAction(directReturn);
+        IEntityAction action = factory.GetAction(directReturn);
         action.Init(entity);
         if (!directReturn)
             localPool.Add(action);
@@ -48,7 +48,7 @@ public class ActionContainer
 
     public void Clear()
     {
-        foreach (IAction action in localPool)
+        foreach (IEntityAction action in localPool)
             factory.ReturnAction(action);
         localPool.Clear();
     }

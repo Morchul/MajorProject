@@ -18,4 +18,18 @@ public abstract class Entity : MonoBehaviour
                 return (T)component;
         return null;
     }
+
+    public bool TryGetComponent<T>(int componentID, out T entityComponent) where T : EntityComponent
+    {
+        entityComponent = GetComponent<T>(componentID);
+        return entityComponent != null;
+    }
+
+    public bool HasComponent(int componentID)
+    {
+        foreach (EntityComponent component in components)
+            if (component.ID == componentID)
+                return true;
+        return false;
+    }
 }

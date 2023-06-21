@@ -19,7 +19,7 @@ public class TakeOutAction : BaseAction
     public override void Execute(Entity entity)
     {
         entity.GetComponent<CarryComponent>(ComponentIDs.CARRY).CarriedItem = container.TakeOut();
-        Status = ActionState.FINISHED;
+        ActionFinished();
     }
 
     public override void Update()

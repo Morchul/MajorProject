@@ -28,7 +28,7 @@ public class PutInAction : BaseAction
             }
         }
 
-        Status = ActionState.FINISHED;
+        ActionFinished();
     }
 
     public override void Update()

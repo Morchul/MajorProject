@@ -15,6 +15,10 @@ public class SmartObject : Entity, ISmartObject
 
     public event System.Action OnObjectStateChange;
 
+    private int itemID;
+    public bool CanBeItem => itemID > 0;
+    public ItemComponent ItemComponent => (ItemComponent)components[itemID];
+
     private void OnDestroy()
     {
         foreach (ActionContainer container in actions) container.Clear();
@@ -29,14 +33,21 @@ public class SmartObject : Entity, ISmartObject
 
     protected override void Awake()
     {
-        //base.Awake();
+        base.Awake();
+        itemID = 0;
+
         List<ActionComponent> actionComp = new List<ActionComponent>(actionComponents);
-        SmartObjectComponent[] smartObjectComponents = GetComponents<SmartObjectComponent>();
-        components = new EntityComponent[smartObjectComponents.Length];
-        for(int i = 0; i < smartObjectComponents.Length; ++i)
+        for(int i = 0; i < components.Length; ++i)
         {
-            actionComp.AddRange(smartObjectComponents[i].GetComponentActions());
-            components[i] = smartObjectComponents[i];
+            EntityComponent comp = components[i];
+            ActionComponent[] actionArray = comp.GetComponentActions();
+            if (actionArray != null)
+                actionComp.AddRange(actionArray);
+
+            if (comp.ID == ComponentIDs.ITEM)
+            {
+                itemID = i;
+            }
         }
 
         actions = new ActionContainer[actionComp.Count];
@@ -46,13 +57,13 @@ public class SmartObject : Entity, ISmartObject
         }
     }
 
-    public bool TryGetAction(ActionID actionID, out IAction action)
+    public bool TryGetAction(ActionID actionID, out IEntityAction action)
     {
         action = GetAction(actionID);
         return action != null;
     }
 
-    public IAction GetAction(ActionID actionID)
+    public IEntityAction GetAction(ActionID actionID)
     {
         for (int i = 0; i < actions.Length; ++i)
         {

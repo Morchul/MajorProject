@@ -36,7 +36,7 @@ public class HumanAI : AI
 
         BTNode takeOutFromStorage = new BTNode(() =>
         {
-            if (FoodContainer.TryGetAction(ActionID.TAKE_OUT, out IAction action))
+            if (FoodContainer.TryGetAction(ActionID.TAKE_OUT, out IEntityAction action))
             {
                 agent.AddAction(action);
                 return AbstractBTNode.BTStatus.SUCCESS;
@@ -91,11 +91,28 @@ public class HumanAI : AI
             //}
 
             //return AbstractBTNode.BTStatus.SUCCESS;
-            
         });
+
+        BTNode locateNearbyTree = new BTNode(() =>
+        {
+            //if(TargetObject == null)
+            //{
+            SmartObject tree = BTFindSomething.SearchClosest<SmartObject>("Tree", transform.position, 10);
+            if (tree != null)
+            {
+                MoveTarget = tree.transform.position;
+                TargetObject = tree;
+                return AbstractBTNode.BTStatus.SUCCESS;
+            }
+            return AbstractBTNode.BTStatus.FAILURE;
+            //}
+
+            //return AbstractBTNode.BTStatus.SUCCESS;
+        });
+
         BTNode eatFoodInHand = new BTNode(() =>
         {
-            if (carry.CarriedItem != null && carry.CarriedItem.TryGetAction(ActionID.EAT, out IAction action))
+            if (carry.CarriedItem != null && carry.CarriedItem.TryGetAction(ActionID.EAT, out IEntityAction action))
             {
                 agent.AddAction(action);
                 carry.CarriedItem = null;
@@ -113,6 +130,12 @@ public class HumanAI : AI
         BTNode hasFood = new BTNode(() =>
         {
             return (carry.CarriedItem != null) ? AbstractBTNode.BTStatus.SUCCESS : AbstractBTNode.BTStatus.FAILURE;
+        });
+
+        BTNode attack = new BTNode(() =>
+        {
+            agent.AddAction(agent.GetAction(ActionID.ATTACK));
+            return AbstractBTNode.BTStatus.SUCCESS;
         });
 
         BTSequence pickUpNearbyFoodSequence = new BTSequence(locateNearbyFood, moveTo, pickUpTargetObject);
@@ -135,11 +158,17 @@ public class HumanAI : AI
         Decision gatherFoodDecision = new Decision(gatherFoodPlan, (lastPlanRun) => 0.6f + 0.2f * (int)lastPlanRun);
         #endregion
 
+        #region Cut Tree
+        BTSequence cutTreeSequence = new BTSequence(locateNearbyTree, moveTo, attack);
+        IPlan cutTreePlan = new BTRoot(cutTreeSequence, this);
+        Decision cutTreeDecision = new Decision(cutTreePlan, (_) => 0.5f);
+        #endregion
+
         State idleState = new State();
         idleState.AddTransaction(hungry);
 
         idleState.AddDecision(eatDecision);
-        //idleState.AddDecision(moveAround);
+        idleState.AddDecision(cutTreeDecision);
         idleState.AddDecision(gatherFoodDecision);
 
         StateMachine stateMachine = new StateMachine(this);

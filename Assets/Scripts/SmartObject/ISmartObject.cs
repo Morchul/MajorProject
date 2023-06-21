@@ -6,5 +6,7 @@ public interface ISmartObject: IHasActions
 public enum ObjectType
 {
     FOOD,
-    FOOD_CONTAINER
+    FOOD_CONTAINER,
+    TREE,
+    WOOD
 }

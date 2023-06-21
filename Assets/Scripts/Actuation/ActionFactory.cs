@@ -6,19 +6,19 @@ public class ActionFactory
 {
     public readonly ActionID ActionID;
 
-    private readonly Stack<IAction> pool;
-    private readonly System.Func<IAction> CreateMethod;
+    private readonly Stack<IEntityAction> pool;
+    private readonly System.Func<IEntityAction> CreateMethod;
 
-    public ActionFactory(System.Func<IAction> createMethod, ActionID actionID)
+    public ActionFactory(System.Func<IEntityAction> createMethod, ActionID actionID)
     {
-        pool = new Stack<IAction>();
+        pool = new Stack<IEntityAction>();
         CreateMethod = createMethod;
         ActionID = actionID;
     }
 
-    public IAction GetAction(bool returnWhenInactive)
+    public IEntityAction GetAction(bool returnWhenInactive)
     {
-        IAction action = (pool.Count == 0) ? CreateMethod() : pool.Pop();
+        IEntityAction action = (pool.Count == 0) ? CreateMethod() : pool.Pop();
         //IAction action;
         //if (pool.Count == 0)
         //{
@@ -37,10 +37,10 @@ public class ActionFactory
         return action;
     }
 
-    public void ReturnAction(IAction action)
+    public void ReturnAction(IEntityAction action)
     {
         Debug.Log("Return action: " + action.Name);
-        action.Return();
+        action.OnReturn();
         pool.Push(action);
     }
 }

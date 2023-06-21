@@ -2,20 +2,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionEntity : Entity
+public class ActionEntity : Entity, IHasActions
 {
     protected ActionRingBuffer ringBuffer;
     protected IAction nextAction;
+
+    protected IEntityAction[] actions;
 
     protected override void Awake()
     {
         ringBuffer = new ActionRingBuffer(5);
         base.Awake();
+
+        List<ActionComponent> actionComp = new List<ActionComponent>();
+        foreach(EntityComponent component in components)
+        {
+            ActionComponent[] actionArray = component.GetComponentActions();
+            if(actionArray != null)
+                actionComp.AddRange(actionArray);
+        }
+
+        actions = new IEntityAction[actionComp.Count];
+        for(int i = 0; i < actionComp.Count; ++i)
+        {
+            IEntityAction action = GlobalActionFactory.GetAction(actionComp[i].ActionID, false);
+            action.Init(this);
+            actions[i] = action;
+        }
+    }
+
+    protected virtual void ReturnActions()
+    {
+        foreach (IEntityAction action in actions) GlobalActionFactory.ReturnAction(action);
     }
 
     protected virtual void Update()
     {
         UpdateActions();
+    }
+
+    public bool TryGetAction(ActionID actionID, out IEntityAction action)
+    {
+        action = GetAction(actionID);
+        return action != null;
+    }
+
+    public IEntityAction GetAction(ActionID actionID)
+    {
+        foreach (IEntityAction action in actions)
+            if (action.ID == actionID)
+                return action;
+        return null;
     }
 
     #region Action Queue
@@ -94,6 +131,5 @@ public class ActionEntity : Entity
             ExecuteAction();
         }
     }
-
     #endregion
 }

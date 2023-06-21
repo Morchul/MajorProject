@@ -23,7 +23,7 @@ public class EatAction : BaseAction
         hunger.Food = Mathf.Min(hunger.Food + eatable.Amount, 100);
         Debug.Log("Eat... new food meter: " + hunger.Food);
         GameObject.Destroy(eatable.gameObject);
-        Status = ActionState.FINISHED;
+        ActionFinished();
     }
 
     public override void Update() {}
