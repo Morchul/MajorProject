@@ -41,17 +41,10 @@ public class AttackAction : BaseAction
         {
             animationComponent.Play(attackComponent.attackAnim, (id) => AttackEvent(id, attackComponent));
         }
-        //entity.StartCoroutine(AttackDelay());
-        //ActionFinished();
     }
 
-    //private void AttackEvent(int eventID)
-    //{
-    //    if (eventID == 0)
-    //        ActionFinished();
-    //    else if (eventID == 1)
-    //        DealDamage();
-    //}
+
+    protected override int[] GetMandatoryComponentIDs() => new int[] {  };
 
     private void DealDamage(AttackComponent attackComponent, Vector3 pos)
     {

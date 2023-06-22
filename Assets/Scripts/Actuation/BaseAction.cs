@@ -26,7 +26,7 @@ public abstract class BaseAction : IEntityAction
         get => status;
         set
         {
-            Debug.Log("Set status of action " + Name + " to: " + value);
+            //Debug.Log("Set status of action " + Name + " to: " + value);
             status = value;
             if (status == ActionState.INACTIVE) OnInactive?.Invoke();
         }
@@ -47,4 +47,16 @@ public abstract class BaseAction : IEntityAction
     {
         Status = ActionState.FINISHED;
     }
+
+    public bool CanBeExecutedBy(Entity entity)
+    {
+        int[] compIDs = GetMandatoryComponentIDs();
+        for(int i = 0; i < compIDs.Length; ++i)
+        {
+            if (!entity.HasComponent(compIDs[i])) return false;
+        }
+        return true;
+    }
+
+    protected abstract int[] GetMandatoryComponentIDs();
 }

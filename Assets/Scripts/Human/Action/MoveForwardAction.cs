@@ -29,4 +29,5 @@ public class MoveForwardAction : BaseAction
 
         moveComponent.MoveForward();
     }
+    protected override int[] GetMandatoryComponentIDs() => new int[] { };
 }

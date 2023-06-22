@@ -27,4 +27,6 @@ public class EatAction : BaseAction
     }
 
     public override void Update() {}
+
+    protected override int[] GetMandatoryComponentIDs() => new int[] { ComponentIDs.HUNGER };
 }

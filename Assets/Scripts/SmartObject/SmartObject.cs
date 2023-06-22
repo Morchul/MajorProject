@@ -31,6 +31,11 @@ public class SmartObject : Entity, ISmartObject
         //OnObjectStateChange = null; everyone who wants to keep listening has to reassign but it is better if most of them won't continue to listen.
     }
 
+    public void Destory()
+    {
+
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -73,5 +78,13 @@ public class SmartObject : Entity, ISmartObject
             }
         }
         return null;
+    }
+
+    public IEnumerable<IEntityAction> GetActions()
+    {
+        for(int i = 0; i < actions.Length; ++i)
+        {
+            yield return actions[i].GetAction();
+        }
     }
 }

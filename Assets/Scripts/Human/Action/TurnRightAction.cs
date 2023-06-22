@@ -29,6 +29,7 @@ public class TurnRightAction : BaseAction
 
         moveComponent.TurnRight();
     }
+    protected override int[] GetMandatoryComponentIDs() => new int[] { };
 }
 
 public class TurnLeftAction : BaseAction
@@ -61,4 +62,5 @@ public class TurnLeftAction : BaseAction
         }
         moveComponent.TurnLeft();
     }
+    protected override int[] GetMandatoryComponentIDs() => new int[] { };
 }

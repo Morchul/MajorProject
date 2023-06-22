@@ -33,4 +33,6 @@ public class MoveBackwardAction : BaseAction
 
         moveComponent.MoveBackward();
     }
+
+    protected override int[] GetMandatoryComponentIDs() => new int[] { };
 }

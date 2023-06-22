@@ -13,10 +13,48 @@ public class PlayerController : MonoBehaviour
     private IEntityAction moveForward;
     private IEntityAction turnRight;
     private IEntityAction turnLeft;
+    private IEntityAction attack;
 
-    private void Awake()
+    public IEntityAction action1;
+    public IEntityAction action2;
+    public IEntityAction action3;
+
+    private void Start()
     {
         ai = human.GetComponent<HumanAI>();
+        moveForward = human.GetAction(ActionID.MOVE_FORWARD);
+        turnLeft = human.GetAction(ActionID.TURN_LEFT);
+        turnRight = human.GetAction(ActionID.TURN_RIGHT);
+        attack = human.GetAction(ActionID.ATTACK);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        SmartObject so = other.gameObject.GetComponent<SmartObject>();
+        if (so != null)
+        {
+            int counter = 0;
+            foreach (IEntityAction action in so.GetActions())
+            {
+                if (action.CanBeExecutedBy(human))
+                {
+                    switch (counter)
+                    {
+                        case 0: action1 = action; break;
+                        case 1: action2 = action; break;
+                        case 2: action3 = action; break;
+                        default: return;
+                    }
+                    ++counter;
+                    Debug.Log($"Action {action.Name} can be executed. [{counter}]");
+                }
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        ClearActions();
     }
 
     private void Update()
@@ -30,7 +68,6 @@ public class PlayerController : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.W))
             {
-                moveForward = human.GetAction(ActionID.MOVE_FORWARD);
                 human.AddAction(moveForward);
             }
             else if (Input.GetKeyUp(KeyCode.W))
@@ -39,7 +76,6 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
-                turnLeft = human.GetAction(ActionID.TURN_LEFT);
                 human.AddAction(turnLeft);
             }
             else if (Input.GetKeyUp(KeyCode.A))
@@ -48,7 +84,6 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                turnRight = human.GetAction(ActionID.TURN_RIGHT);
                 human.AddAction(turnRight);
             }
             else if (Input.GetKeyUp(KeyCode.D))
@@ -57,14 +92,38 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(0))
             {
-                human.AddAction(human.GetAction(ActionID.ATTACK));
+                human.AddAction(attack);
+            }
+
+            if(Input.GetKeyDown(KeyCode.E) && action1 != null)
+            {
+                human.AddAction(action1);
+                ClearActions();
+            }
+            if (Input.GetKeyDown(KeyCode.R) && action1 != null)
+            {
+                human.AddAction(action2);
+                ClearActions();
+            }
+            if (Input.GetKeyDown(KeyCode.T) && action1 != null)
+            {
+                human.AddAction(action3);
+                ClearActions();
             }
         }
+    }
+
+    private void ClearActions()
+    {
+        action1 = null;
+        action2 = null;
+        action3 = null;
     }
 
     private void ChangeControl()
     {
         ai.enabled = hasControl;
         hasControl = !hasControl;
+        transform.SetParent(human.transform, false);
     }
 }

@@ -20,5 +20,7 @@ public interface IEntityAction : IAction
 
     public event System.Action OnInactive;
 
+    public bool CanBeExecutedBy(Entity entity);
+
     public void OnReturn();
 }
