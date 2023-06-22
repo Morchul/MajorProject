@@ -4,7 +4,5 @@ using UnityEngine;
 
 public abstract class SmartObjectComponent : EntityComponent
 {
-    [SerializeField]
-    private bool itemComponent;
-    public bool ItemComponent => itemComponent;
+
 }

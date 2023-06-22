@@ -8,16 +8,7 @@ public class PickUpComponent : SmartObjectComponent
 
     public override int ID => ComponentIDs.PICK_UP;
 
-    public override ActionComponent[] GetComponentActions()
-    {
-        return new ActionComponent[]
-        {
-            new ActionComponent()
-            {
-                ActionID = ActionID.PICK_UP,
-                MaxContainerSize = 0,
-                StartContainerSize = 0
-            }
-        };
-    }
+    public override ActionComponent[] GetComponentActions() => null;
+
+    public override void Init(Entity entity) { }
 }

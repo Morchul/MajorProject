@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PickUpAction : BaseAction
 {
-    private PickUpComponent pickUpComponent;
+    private ItemComponent itemComponent;
     
     public override int Layer => 0;
     public override ActionID ID => ActionID.PICK_UP;
@@ -13,13 +13,12 @@ public class PickUpAction : BaseAction
 
     public override void Init(Entity entity)
     {
-        pickUpComponent = entity.GetComponent<PickUpComponent>(ComponentIDs.PICK_UP);
+        itemComponent = entity.GetComponent<ItemComponent>(ComponentIDs.ITEM);
     }
 
     public override void Execute(Entity entity)
     {
-        entity.GetComponent<CarryComponent>(ComponentIDs.CARRY).CarriedItem = pickUpComponent.Item;
-        pickUpComponent.gameObject.SetActive(false);
+        entity.GetComponent<CarryComponent>(ComponentIDs.CARRY).CarriedItem = itemComponent.PickUpItem();
         ActionFinished();
     }
 

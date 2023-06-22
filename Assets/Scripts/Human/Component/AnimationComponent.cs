@@ -8,15 +8,16 @@ public class AnimationComponent : EntityComponent
 
     public override ActionComponent[] GetComponentActions() => null;
 
-    private Animator animator;
+    [SerializeField]
+    private AnimationEventListener animationController;
+    [field: SerializeField]
+    public Animator Animator { get; private set; }
 
-    private void Awake()
+    public void Play(AnimationClip animation, System.Action<int> OnEventFired)
     {
-        animator = GetComponent<Animator>();
+        animationController.SetListener(OnEventFired);
+        Animator.Play(animation.name);
     }
 
-    public void Animation(Animation animation)
-    {
-        //animator.Play()
-    }
+    public override void Init(Entity entity) { }
 }

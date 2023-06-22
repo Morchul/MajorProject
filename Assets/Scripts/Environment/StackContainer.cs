@@ -6,7 +6,7 @@ public class StackContainer : ContainerComponent
 {
     public Stack<SmartObject> foodStored;
 
-    protected void Awake()
+    public override void Init(Entity entity)
     {
         foodStored = new Stack<SmartObject>(capacity);
 

@@ -8,6 +8,8 @@ public class AttackComponent : EntityComponent
 
     public Vector3 HitArea;
 
+    public AnimationClip attackAnim;
+
     public override int ID => ComponentIDs.ATTACK;
 
     public override ActionComponent[] GetComponentActions()
@@ -22,4 +24,7 @@ public class AttackComponent : EntityComponent
             }
         };
     }
+
+    public override void Init(Entity entity) { }
+
 }

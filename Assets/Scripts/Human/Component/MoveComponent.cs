@@ -19,6 +19,12 @@ public class MoveComponent : EntityComponent
             },
             new ActionComponent()
             {
+                ActionID = ActionID.MOVE_BACKWARD,
+                MaxContainerSize = 1,
+                StartContainerSize = 1
+            },
+            new ActionComponent()
+            {
                 ActionID = ActionID.TURN_LEFT,
                 MaxContainerSize = 1,
                 StartContainerSize = 1
@@ -37,6 +43,11 @@ public class MoveComponent : EntityComponent
         transform.Translate(Vector3.forward * Time.deltaTime * MoveSpeed);
     }
 
+    public void MoveBackward()
+    {
+        transform.Translate(Vector3.forward * Time.deltaTime * -MoveSpeed);
+    }
+
     public void TurnRight()
     {
         Vector3 rotation = new Vector3(0, Time.deltaTime * TurnSpeed, 0);
@@ -48,4 +59,6 @@ public class MoveComponent : EntityComponent
         Vector3 rotation = new Vector3(0, Time.deltaTime * -TurnSpeed, 0);
         transform.Rotate(rotation);
     }
+
+    public override void Init(Entity entity) { }
 }

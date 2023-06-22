@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4925192178318244442}
   - component: {fileID: 4083460529492801129}
   - component: {fileID: 5334522113960324617}
+  - component: {fileID: -8771255492263362519}
   m_Layer: 0
   m_Name: Food
   m_TagString: Food
@@ -124,7 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa1a1ccc3ab3cc947b8beaf3f9b03c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemComponent: 0
   Item: {fileID: 4925192178318244442}
 --- !u!114 &5334522113960324617
 MonoBehaviour:
@@ -138,5 +138,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80644d363ac6e9942bbaeaf62de6dc38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemComponent: 1
   Amount: 6
+--- !u!114 &-8771255492263362519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360976729514497301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4da66aeae1da3146bfcb2c7604231a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Item: {fileID: 4925192178318244442}
+  ItemID: 0
+  Icon: {fileID: 0}
+  Stackable: 0

@@ -20,4 +20,6 @@ public class EdibleComponent : SmartObjectComponent
             }
         };
     }
+
+    public override void Init(Entity entity) { }
 }

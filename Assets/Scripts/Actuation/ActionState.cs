@@ -3,6 +3,7 @@ public enum ActionID : int
     //REMEMBER TO ADD A FACTURY!!!
     EAT,
     MOVE_FORWARD,
+    MOVE_BACKWARD,
     TURN_RIGHT,
     TURN_LEFT,
     PICK_UP,

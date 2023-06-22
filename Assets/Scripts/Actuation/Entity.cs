@@ -9,6 +9,8 @@ public abstract class Entity : MonoBehaviour
     protected virtual void Awake()
     {
         components = GetComponents<EntityComponent>();
+        foreach (EntityComponent component in components)
+            component.Init(this);
     }
 
     public T GetComponent<T>(int componentID) where T : EntityComponent

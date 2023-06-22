@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackAction : BaseAction
 {
-    public override int Layer => (int)(ActionLayers.ARMS);
+    public override int Layer => (int)(ActionLayers.ARMS | ActionLayers.LEGS);
 
     public override string Name => "Attack";
 
@@ -12,34 +12,46 @@ public class AttackAction : BaseAction
 
     private CarryComponent carry;
     private AttackComponent attackComponent;
+    private AnimationComponent animationComponent;
 
     public override void Init(Entity entity)
     {
         carry = entity.GetComponent<CarryComponent>(ComponentIDs.CARRY);
         attackComponent = entity.GetComponent<AttackComponent>(ComponentIDs.ATTACK);
+        animationComponent = entity.GetComponent<AnimationComponent>(ComponentIDs.ANIMATION);
     }
 
     public override void Execute(Entity entity)
     {
-        if(carry != null && 
+        void AttackEvent(int eventID, AttackComponent attackComp)
+        {
+            if (eventID == 0)
+                ActionFinished();
+            else if (eventID == 1)
+                DealDamage(attackComp, entity.transform.position);
+        };
+
+        if (carry != null && 
             carry.CarriedItem != null &&
             carry.CarriedItem.TryGetComponent(ComponentIDs.ATTACK, out AttackComponent attackComp))
         {
-            DealDamage(attackComp, entity.transform.position);
+            animationComponent.Play(attackComp.attackAnim, (id) => AttackEvent(id, attackComp));
         }
         else
         {
-            DealDamage(attackComponent, entity.transform.position);
+            animationComponent.Play(attackComponent.attackAnim, (id) => AttackEvent(id, attackComponent));
         }
-        entity.StartCoroutine(AttackDelay());
+        //entity.StartCoroutine(AttackDelay());
         //ActionFinished();
     }
 
-    private IEnumerator AttackDelay()
-    {
-        yield return new WaitForSeconds(2);
-        ActionFinished();
-    }
+    //private void AttackEvent(int eventID)
+    //{
+    //    if (eventID == 0)
+    //        ActionFinished();
+    //    else if (eventID == 1)
+    //        DealDamage();
+    //}
 
     private void DealDamage(AttackComponent attackComponent, Vector3 pos)
     {

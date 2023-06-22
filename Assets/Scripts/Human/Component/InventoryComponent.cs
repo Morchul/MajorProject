@@ -13,7 +13,7 @@ public class InventoryComponent : EntityComponent
 
     public Inventory Inventory { get; private set; }
 
-    private void Awake()
+    public override void Init(Entity entity)
     {
         Inventory = new Inventory(inventorySize);
     }

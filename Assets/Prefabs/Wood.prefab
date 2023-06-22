@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 8813122376648539272}
   - component: {fileID: 8813122376648539279}
   - component: {fileID: 8813122376648539278}
-  - component: {fileID: 8813122376648539277}
+  - component: {fileID: 3332496301809693748}
   m_Layer: 0
   m_Name: Wood
-  m_TagString: Untagged
+  m_TagString: Wood
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,9 +109,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3fecc572637e54d9bce9c1b4b675c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 3
   actionComponents: []
---- !u!114 &8813122376648539277
+--- !u!114 &3332496301809693748
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,8 +120,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8813122376648539276}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa1a1ccc3ab3cc947b8beaf3f9b03c3f, type: 3}
+  m_Script: {fileID: 11500000, guid: b4da66aeae1da3146bfcb2c7604231a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemComponent: 1
   Item: {fileID: 8813122376648539278}
+  ItemID: 0
+  Icon: {fileID: 0}
+  Stackable: 0

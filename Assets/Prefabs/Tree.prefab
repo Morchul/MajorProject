@@ -125,5 +125,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 2
   actionComponents: []
-  woodPrefab: {fileID: 0}
+  woodPrefab: {fileID: 8813122376648539278, guid: 2510e3fa9ed39eb45b31d48395b2dd29, type: 3}
   <WoodAmount>k__BackingField: 2

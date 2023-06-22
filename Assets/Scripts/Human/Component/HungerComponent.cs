@@ -14,4 +14,6 @@ public class HungerComponent : EntityComponent
     }
 
     public override ActionComponent[] GetComponentActions() => null;
+
+    public override void Init(Entity entity) { }
 }
