@@ -26,7 +26,7 @@ public abstract class BaseAction : IEntityAction
         get => status;
         set
         {
-            //Debug.Log("Set status of action " + Name + " to: " + value);
+            Debug.Log("Set status of action " + Name + " to: " + value);
             status = value;
             if (status == ActionState.INACTIVE) OnInactive?.Invoke();
         }

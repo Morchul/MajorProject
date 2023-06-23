@@ -19,10 +19,17 @@ public static class Extensions
     public static Vector2 MultiplyX(this Vector2 vec2, float x) => new Vector2(vec2.x * x, vec2.y);
     public static Vector2 MultiplyY(this Vector2 vec2, float y) => new Vector2(vec2.x, vec2.y * y);
 
-    public static Vector2 RandomVector2(float xMin, float xMax, float yMin, float yMax) => new Vector2(Random.Range(xMin, xMax), Random.Range(yMin, yMax));
-
     public static bool IsActive(this IAction action) => action.Status < ActionState.SLEEPING;
     public static bool IsInactive(this IAction action) => action.Status > ActionState.FINISHED;
 
-    public static PlanState GetPlanState(this AbstractBTNode.BTStatus status) => (status == AbstractBTNode.BTStatus.FAILURE) ? PlanState.FAILURE : PlanState.SUCCESSFUL;
+    public static PlanState GetPlanState(this AbstractBTNode.BTStatus status)
+    {
+        return status switch
+        {
+            AbstractBTNode.BTStatus.RUNNING => PlanState.RUNNING,
+            AbstractBTNode.BTStatus.SUCCESS => PlanState.SUCCESSFUL,
+            AbstractBTNode.BTStatus.FAILURE => PlanState.FAILURE,
+            _ => PlanState.FAILURE
+        };
+    }
 }

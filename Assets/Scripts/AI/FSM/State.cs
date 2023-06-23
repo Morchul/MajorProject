@@ -20,6 +20,11 @@ public class State
             transaction.Update();
     }
 
+    public void ResetDecisions()
+    {
+        foreach (Decision decision in decisions) decision.Reset();
+    }
+
     public void AddDecision(IDecision decision) => decisions.Add(decision);
     public List<IDecision> GetDecisions() => decisions;
 

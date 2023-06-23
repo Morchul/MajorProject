@@ -17,7 +17,7 @@ public class BTPickRandomSpot : AbstractBTNode
     {
         if(ai.MoveTarget == Vector3.zero)
         {
-            ai.MoveTarget = ai.transform.position + Extensions.RandomVector2(-6,6,-6,6).ToVector3_XZ();
+            ai.MoveTarget = ai.transform.position + Utility.RandomVector2(-6,6,-6,6).ToVector3_XZ();
         }
 
         return BTStatus.SUCCESS;

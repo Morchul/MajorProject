@@ -1,12 +1,11 @@
 public interface IPlan
 {
-    public void Update();
-    public PlanState GetLastRunState();
+    public PlanState Update();
 }
 
 public enum PlanState
 {
-    NONE = 0,
-    SUCCESSFUL = 1,
-    FAILURE = -1
+    RUNNING = 1, //It is running, tendency to keep continue
+    SUCCESSFUL = 0, //Task completed successfully
+    FAILURE = -1 //Task failed tend to do something else
 }

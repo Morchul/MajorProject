@@ -23,7 +23,7 @@ public class Tree : SmartObject
 
         for(int i = 0; i < WoodAmount; ++i)
         {
-            Instantiate(woodPrefab, transform.position + Extensions.RandomVector2(-2,2,-2,2).ToVector3_XZ(), Quaternion.identity);
+            Instantiate(woodPrefab, transform.position + Utility.RandomVector2(-2,2,-2,2).ToVector3_XZ(), Quaternion.identity);
         }
     }
 }

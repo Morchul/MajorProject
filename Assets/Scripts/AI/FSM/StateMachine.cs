@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class StateMachine : ISensor
 {
     private State currentState;
 
     private readonly AI ai;
+
+    private float deltaTimeSinceLastDecision;
 
     public StateMachine(AI ai)
     {
@@ -13,7 +16,11 @@ public class StateMachine : ISensor
 
     public void SetState(State state)
     {
+        if(currentState != null)
+            currentState.ResetDecisions();
+        deltaTimeSinceLastDecision = 0;
         currentState = state;
+        
         ai.MakeNewDecision();
     }
 
@@ -27,7 +34,7 @@ public class StateMachine : ISensor
 
         for (int i = 0; i < decisions.Count; ++i)
         {
-            float decisionUtility = decisions[i].CalculateUtility();
+            float decisionUtility = decisions[i].CalculateUtility(deltaTimeSinceLastDecision);
             if (decisionUtility > highestUtiltiy)
             {
                 highestUtiltiy = decisionUtility;
@@ -35,11 +42,13 @@ public class StateMachine : ISensor
             }
         }
 
+        deltaTimeSinceLastDecision = 0;
         return decisions[maxIndex];
     }
 
     public void Update()
     {
+        deltaTimeSinceLastDecision += Time.deltaTime;
         currentState.Update();
     }
 }

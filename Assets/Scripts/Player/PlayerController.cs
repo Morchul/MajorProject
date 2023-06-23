@@ -95,17 +95,17 @@ public class PlayerController : MonoBehaviour
                 human.AddAction(attack);
             }
 
-            if(Input.GetKeyDown(KeyCode.E) && action1 != null)
+            if(Input.GetKeyDown(KeyCode.Alpha1) && action1 != null)
             {
                 human.AddAction(action1);
                 ClearActions();
             }
-            if (Input.GetKeyDown(KeyCode.R) && action1 != null)
+            if (Input.GetKeyDown(KeyCode.Alpha2) && action1 != null)
             {
                 human.AddAction(action2);
                 ClearActions();
             }
-            if (Input.GetKeyDown(KeyCode.T) && action1 != null)
+            if (Input.GetKeyDown(KeyCode.Alpha3) && action1 != null)
             {
                 human.AddAction(action3);
                 ClearActions();

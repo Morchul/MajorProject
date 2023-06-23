@@ -48,7 +48,7 @@ public class HumanAI : AI
         {
             if(FoodContainer == null)
             {
-                FoodContainer = BTFindSomething.SearchClosest<SmartObject>("FoodContainer", transform.position, 10);
+                FoodContainer = BTFindSomething.SearchClosest<SmartObject>("FoodContainer", transform.position, 15);
             }
             
             if(FoodContainer != null)
@@ -76,11 +76,23 @@ public class HumanAI : AI
             return AbstractBTNode.BTStatus.SUCCESS;
         });
 
+        BTNode locateNearbyWood = new BTNode(() =>
+        {
+            SmartObject wood = BTFindSomething.SearchClosest<SmartObject>("Wood", transform.position, 15);
+            if (wood != null)
+            {
+                MoveTarget = wood.transform.position;
+                TargetObject = wood;
+                return AbstractBTNode.BTStatus.SUCCESS;
+            }
+            return AbstractBTNode.BTStatus.FAILURE;
+        });
+
         BTNode locateNearbyFood = new BTNode(() =>
         {
             //if(TargetObject == null)
             //{
-                SmartObject food = BTFindSomething.SearchClosest<SmartObject>("Food", transform.position, 10);
+                SmartObject food = BTFindSomething.SearchClosest<SmartObject>("Food", transform.position, 15);
                 if (food != null)
                 {
                     MoveTarget = food.transform.position;
@@ -97,7 +109,7 @@ public class HumanAI : AI
         {
             //if(TargetObject == null)
             //{
-            SmartObject tree = BTFindSomething.SearchClosest<SmartObject>("Tree", transform.position, 10);
+            SmartObject tree = BTFindSomething.SearchClosest<SmartObject>("Tree", transform.position, 15);
             if (tree != null)
             {
                 MoveTarget = tree.transform.position;
@@ -148,6 +160,7 @@ public class HumanAI : AI
         BTSelector eatSelector = new BTSelector(eatFoodInHand, successToRunningDec1, successToRunningDec2);
         IPlan eatFoodPlan = new BTRoot(eatSelector, this);
         Decision eatDecision = new Decision(eatFoodPlan, (_) => 1 - (hunger.Food / 100)); //Linear utility, depending on how much food left
+        eatDecision.SuccessDecisionModifier.Set(0.15f, 0.5f);
         #endregion
 
         #region GatherFood
@@ -155,13 +168,23 @@ public class HumanAI : AI
 
         BTSelector gatherFoodSelector = new BTSelector(putFoodIntoStorage, successToRunningDec1);
         IPlan gatherFoodPlan = new BTRoot(gatherFoodSelector, this);
-        Decision gatherFoodDecision = new Decision(gatherFoodPlan, (lastPlanRun) => 0.6f + 0.2f * (int)lastPlanRun);
+
+        Decision gatherFoodDecision = new Decision(gatherFoodPlan, (_) => 0.6f);
+        gatherFoodDecision.RunningDecisionModifier.Set(0.2f, 2f);
+        gatherFoodDecision.FailedDecisionModifier.Set(-0.3f, 3f);
         #endregion
 
         #region Cut Tree
         BTSequence cutTreeSequence = new BTSequence(locateNearbyTree, moveTo, attack);
         IPlan cutTreePlan = new BTRoot(cutTreeSequence, this);
-        Decision cutTreeDecision = new Decision(cutTreePlan, (_) => 0.5f);
+        Decision cutTreeDecision = new Decision(cutTreePlan, (_) => agent.Strength + 0.1f);
+        cutTreeDecision.FailedDecisionModifier.Set(-0.4f, 5f);
+        #endregion
+
+        #region Gather wood
+        BTSequence gatherWoodSequence = new BTSequence(locateNearbyWood, moveTo, pickUpTargetObject);
+        IPlan gatherWoodPlan = new BTRoot(gatherWoodSequence, this);
+        Decision gatherWoodDecision = new Decision(gatherWoodPlan, (_) => 0.4f);
         #endregion
 
         State idleState = new State();
@@ -170,16 +193,12 @@ public class HumanAI : AI
         idleState.AddDecision(eatDecision);
         idleState.AddDecision(cutTreeDecision);
         idleState.AddDecision(gatherFoodDecision);
+        idleState.AddDecision(gatherWoodDecision);
 
         StateMachine stateMachine = new StateMachine(this);
 
         sensor = stateMachine;
 
         stateMachine.SetState(idleState);
-    }
-
-    private IDecision CreateEatDecision()
-    {
-        return null;
     }
 }

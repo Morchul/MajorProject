@@ -18,7 +18,13 @@ public class PickUpAction : BaseAction
 
     public override void Execute(Entity entity)
     {
-        entity.GetComponent<CarryComponent>(ComponentIDs.CARRY).CarriedItem = itemComponent.PickUpItem();
+        CarryComponent carryComp = entity.GetComponent<CarryComponent>(ComponentIDs.CARRY);
+        if(carryComp.CarriedItem != null)
+        {
+            //Drop item
+            carryComp.CarriedItem.Drop(entity.transform.position);
+        }
+        carryComp.CarriedItem = itemComponent.PickUpItem();
         ActionFinished();
     }
 
