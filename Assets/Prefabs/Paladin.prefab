@@ -34,7 +34,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3570184453637791122}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.86, y: 1.03, z: 1.28}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3891513208995081195}
@@ -82,7 +82,7 @@ MonoBehaviour:
   hunger: {fileID: 3570184453637791123}
   carry: {fileID: 3570184453637791120}
   properties: {fileID: 147066627116768425}
-  FoodContainer: {fileID: 0}
+  TargetObject: {fileID: 0}
   MoveTarget: {x: 0, y: 0, z: 0}
 --- !u!114 &3570184453637791121
 MonoBehaviour:
@@ -196,11 +196,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1c503797130cc64dabe45c4f9085337, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.028
+      value: 0.008
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1c503797130cc64dabe45c4f9085337, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.26
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1c503797130cc64dabe45c4f9085337, type: 3}
       propertyPath: m_LocalRotation.w
