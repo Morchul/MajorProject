@@ -9,7 +9,9 @@ public enum ActionID : int
     PICK_UP,
     PUT_IN,
     TAKE_OUT,
-    ATTACK
+    ATTACK,
+    DROP,
+    BUILD
 }
 
 public enum ActionState
@@ -25,6 +27,7 @@ public enum ActionState
 [System.Flags]
 public enum ActionLayers
 {
+    ALL = 0x1111,
     ARMS = 1,
     LEGS = 2,
 }

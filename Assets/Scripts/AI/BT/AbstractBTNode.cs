@@ -1,7 +1,9 @@
 public abstract class AbstractBTNode
 {
     public abstract BTStatus Tick();
-    public abstract void CleanUp();
+    public virtual void CleanUp() { }
+
+    public string Name { get; protected set; }
 
     public enum BTStatus
     {
@@ -15,9 +17,10 @@ public class BTNode : AbstractBTNode
 {
     private readonly System.Func<BTStatus> TickMethod;
 
-    public BTNode(System.Func<BTStatus> tickMethod)
+    public BTNode(string name, System.Func<BTStatus> tickMethod)
     {
         TickMethod = tickMethod;
+        Name = name;
     }
 
     public override void CleanUp() { }

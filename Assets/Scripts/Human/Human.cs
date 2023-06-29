@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Human : ActionEntity
 {
-    [field: SerializeField]
-    public float Strength { get; private set; }
+    public void DebugActionRingBuffer()
+    {
+        ringBuffer.DEBUG_OUTPUT_BUFFER();
+    }
 }

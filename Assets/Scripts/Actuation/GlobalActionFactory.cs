@@ -9,6 +9,8 @@ public static class GlobalActionFactory
     public static ActionFactory PutInFactory = new ActionFactory(() => new PutInAction(), ActionID.PUT_IN);
     public static ActionFactory AttackFactory = new ActionFactory(() => new AttackAction(), ActionID.ATTACK);
     public static ActionFactory MoveBackwardFactory = new ActionFactory(() => new MoveBackwardAction(), ActionID.MOVE_BACKWARD);
+    public static ActionFactory DropFactory = new ActionFactory(() => new DropAction(), ActionID.DROP);
+    public static ActionFactory BuildFactory = new ActionFactory(() => new BuildAction(), ActionID.BUILD);
 
     public static ActionFactory GetFactory(ActionID actionID)
     {
@@ -23,6 +25,8 @@ public static class GlobalActionFactory
             ActionID.PUT_IN => PutInFactory,
             ActionID.ATTACK => AttackFactory,
             ActionID.MOVE_BACKWARD => MoveBackwardFactory,
+            ActionID.DROP => DropFactory,
+            ActionID.BUILD => BuildFactory,
             _ => null
         };
     }

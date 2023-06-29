@@ -61,7 +61,10 @@ public class BTMoveTo : AbstractBTNode
             moveForward.Interrupt();
 
         if (moveForward.Status == ActionState.INACTIVE && turnRight.Status == ActionState.INACTIVE && turnLeft.Status == ActionState.INACTIVE)
+        {
+            ai.MoveTarget = Vector3.zero; //Target reached
             return BTStatus.SUCCESS;
+        }
         else
             return BTStatus.RUNNING;
     }

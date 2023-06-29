@@ -31,7 +31,7 @@ public class SmartObject : Entity, ISmartObject
         //OnObjectStateChange = null; everyone who wants to keep listening has to reassign but it is better if most of them won't continue to listen.
     }
 
-    public void Drop(Vector3 pos)
+    public void SetToObject(Vector3 pos)
     {
         transform.position = pos;
         gameObject.SetActive(true);

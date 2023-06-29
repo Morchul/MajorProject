@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class BTRoot : IPlan
 {
     private readonly AbstractBTNode startNode;
@@ -13,6 +15,7 @@ public class BTRoot : IPlan
     {
         AbstractBTNode.BTStatus status = startNode.Tick();
 
+        Debug.Log("BT ROOT FINISHED WITH: " + status);
         if(status == AbstractBTNode.BTStatus.SUCCESS ||
             status == AbstractBTNode.BTStatus.FAILURE)
         {

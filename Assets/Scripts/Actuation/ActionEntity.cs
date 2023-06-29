@@ -60,6 +60,9 @@ public class ActionEntity : Entity, IHasActions
     {
         if (action.IsActive()) return;
 
+        if (nextAction != null && (nextAction.Status == ActionState.INTERRUPTED || nextAction.Status == ActionState.WAITING))
+            nextAction.Status = ActionState.INACTIVE;
+
         nextAction = action;
         if (nextAction.Status == ActionState.INACTIVE)
             nextAction.Status = ActionState.WAITING;

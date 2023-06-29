@@ -6,8 +6,6 @@ public class InventoryComponent : EntityComponent
 {
     public override int ID => throw new System.NotImplementedException();
 
-    public override ActionComponent[] GetComponentActions() => null;
-
     [SerializeField]
     private int inventorySize;
 

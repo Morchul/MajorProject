@@ -1,6 +1,8 @@
+using UnityEngine;
+
 public class BTSequence : BTComposite
 {
-    public BTSequence(params AbstractBTNode[] children) : base(children)
+    public BTSequence(string name, params AbstractBTNode[] children) : base(name, children)
     {}
 
     public override BTStatus Tick()
@@ -8,6 +10,7 @@ public class BTSequence : BTComposite
         foreach(AbstractBTNode node in children)
         {
             BTStatus state = node.Tick();
+            Debug.Log($"node {node.Name} finished with state: {state}");
             if (state == BTStatus.FAILURE || state == BTStatus.RUNNING) return state;
         }
 

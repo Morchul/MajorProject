@@ -10,10 +10,6 @@ public class HealthComponent : EntityComponent
 
     public event System.Action OnDeath;
 
-    public override ActionComponent[] GetComponentActions() => null;
-
-    public override void Init(Entity entity) { }
-
     public void TakeDamage(float damage)
     {
         Debug.Log($"Take damage: {damage}");

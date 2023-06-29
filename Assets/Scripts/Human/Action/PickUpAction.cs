@@ -22,7 +22,7 @@ public class PickUpAction : BaseAction
         if(carryComp.CarriedItem != null)
         {
             //Drop item
-            carryComp.CarriedItem.Drop(entity.transform.position);
+            carryComp.CarriedItem.SetToObject(entity.transform.position);
         }
         carryComp.CarriedItem = itemComponent.PickUpItem();
         ActionFinished();

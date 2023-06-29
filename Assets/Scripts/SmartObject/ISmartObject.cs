@@ -8,5 +8,7 @@ public enum ObjectType
     FOOD,
     FOOD_CONTAINER,
     TREE,
-    WOOD
+    WOOD,
+    HOUSE,
+    HOUSE_CONST_SITE
 }

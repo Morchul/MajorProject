@@ -6,8 +6,6 @@ public class AnimationComponent : EntityComponent
 {
     public override int ID => ComponentIDs.ANIMATION;
 
-    public override ActionComponent[] GetComponentActions() => null;
-
     [SerializeField]
     private AnimationEventListener animationController;
     [field: SerializeField]
@@ -18,6 +16,4 @@ public class AnimationComponent : EntityComponent
         animationController.SetListener(OnEventFired);
         Animator.Play(animation.name);
     }
-
-    public override void Init(Entity entity) { }
 }

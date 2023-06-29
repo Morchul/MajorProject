@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class ContainerComponent : SmartObjectComponent
+public abstract class ContainerComponent : EntityComponent
 {
     [SerializeField]
     protected int capacity;
@@ -12,7 +12,9 @@ public abstract class ContainerComponent : SmartObjectComponent
     public abstract SmartObject TakeOut();
 
     public abstract bool Empty { get; }
+    public abstract int Count { get; }
 
+    public abstract void Clear();
     public abstract bool CanTake(SmartObject item);
 
     public override ActionComponent[] GetComponentActions()

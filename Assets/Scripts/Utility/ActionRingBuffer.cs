@@ -131,7 +131,7 @@ public class ActionRingBuffer : IEnumerable
 	}
 
     #region Debug
-    private void DEBUG_OUTPUT_BUFFER()
+    public void DEBUG_OUTPUT_BUFFER()
 	{
 		for(int i = 0; i < buffer.Length; ++i)
 		{

@@ -43,6 +43,14 @@ public abstract class AbstractDecision : IDecision
     }
 
     /// <summary>
+    /// Is called when this decision is selected
+    /// </summary>
+    public void Select()
+    {
+        
+    }
+
+    /// <summary>
     /// Called every frame if this decision is the current executed one
     /// </summary>
     public virtual void Update()

@@ -4,4 +4,5 @@ public interface IDecision
     public float CalculateUtility(float deltaTime);
     public void Update();
     public void Stop();
+    public void Select();
 }

@@ -18,6 +18,7 @@ public abstract class AI : MonoBehaviour
             if(currentDecision != null)
                 currentDecision.Stop();
             currentDecision = sensor.MakeDecision();
+            currentDecision.Select();
             //Debug.Log($"Next decision: {currentDecision}");
         }
     }

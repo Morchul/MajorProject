@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HumanAI : AI
 {
+    private Human agent;
+
     [Header("Components")]
     [SerializeField]
     private HungerComponent hunger;
     [SerializeField]
     private CarryComponent carry;
-
-    private Human agent;
+    [SerializeField]
+    private HumanPropertyComponent properties;
 
     [Header("Blackboard")]
-    private SmartObject TargetObject;
-    //public Food TargetFood;
-    public SmartObject FoodContainer;
+    public SmartObject TargetObject;
 
     public Vector3 MoveTarget;
 
@@ -27,146 +25,67 @@ public class HumanAI : AI
 
         BTMoveTo moveTo = new BTMoveTo(agent, this);
         moveTo.MaxDistanceSqrt = 4;
+        BTCheckTargetObject ifTargetObjectIsEdible = new BTCheckTargetObject(this, ComponentIDs.EDIBLE);
+        BTCheckTargetObjectType ifTargetObjectIsTypeWood = new BTCheckTargetObjectType(this, ObjectType.WOOD);
 
-        static AbstractBTNode.BTStatus SuccessToRunning(AbstractBTNode.BTStatus status)
+        BTNode setCarriedObjectAsTarget = new BTNode("Set carried- as targetobject", () =>
         {
-            if (status == AbstractBTNode.BTStatus.SUCCESS) return AbstractBTNode.BTStatus.RUNNING;
-            return status;
-        }
-
-        BTNode takeOutFromStorage = new BTNode(() =>
-        {
-            if (FoodContainer.TryGetAction(ActionID.TAKE_OUT, out IEntityAction action))
+            if (carry.CarriedItem != null)
             {
-                agent.AddAction(action);
+                TargetObject = carry.CarriedItem;
                 return AbstractBTNode.BTStatus.SUCCESS;
             }
-            return AbstractBTNode.BTStatus.FAILURE;
-        });
-
-        BTNode selectFoodContainer = new BTNode(() =>
-        {
-            if(FoodContainer == null)
-            {
-                FoodContainer = BTFindSomething.SearchClosest<SmartObject>("FoodContainer", transform.position, 15);
-            }
-            
-            if(FoodContainer != null)
-            {
-                MoveTarget = FoodContainer.transform.position;
-                return AbstractBTNode.BTStatus.SUCCESS;
-            }
-
-            return AbstractBTNode.BTStatus.FAILURE;
-        });
-
-        BTNode pickUpTargetObject = new BTNode(() =>
-        {
-            IAction pickUpAction = TargetObject.GetAction(ActionID.PICK_UP);
-
-            if (pickUpAction == null)
-            {
-                Debug.Log("Can't pick up: " + TargetObject.name);
-                TargetObject = null;
+            else
                 return AbstractBTNode.BTStatus.FAILURE;
-            }
-            TargetObject = null;
-
-            agent.AddAction(pickUpAction);
-            return AbstractBTNode.BTStatus.SUCCESS;
+             
         });
 
-        BTNode locateNearbyWood = new BTNode(() =>
-        {
-            SmartObject wood = BTFindSomething.SearchClosest<SmartObject>("Wood", transform.position, 15);
-            if (wood != null)
-            {
-                MoveTarget = wood.transform.position;
-                TargetObject = wood;
-                return AbstractBTNode.BTStatus.SUCCESS;
-            }
-            return AbstractBTNode.BTStatus.FAILURE;
-        });
+        BTFindTarget findConstructionSite = new BTFindTarget(this, "ConstructionSite", agent.transform, 15);
+        BTSetTarget setConstructionSite = new BTSetTarget(findConstructionSite);
+        BTFindTarget findWood = new BTFindTarget(this, "Wood", agent.transform, 15);
+        BTSetTarget setWood = new BTSetTarget(findWood);
+        BTFindTarget findTree = new BTFindTarget(this, "Tree", agent.transform, 15);
+        BTFindTarget findFood = new BTFindTarget(this, "Food", agent.transform, 15);
+        BTFindTarget findFoodContainer = new BTFindTarget(this, "FoodContainer", agent.transform, 15);
 
-        BTNode locateNearbyFood = new BTNode(() =>
-        {
-            //if(TargetObject == null)
-            //{
-                SmartObject food = BTFindSomething.SearchClosest<SmartObject>("Food", transform.position, 15);
-                if (food != null)
-                {
-                    MoveTarget = food.transform.position;
-                    TargetObject = food;
-                    return AbstractBTNode.BTStatus.SUCCESS;
-                }
-                return AbstractBTNode.BTStatus.FAILURE;
-            //}
+        BTExecuteAction putInAction = new BTExecuteAction(this, agent, ActionID.PUT_IN);
+        BTExecuteAction buildAction = new BTExecuteAction(this, agent, ActionID.BUILD);
+        BTExecuteAction pickUpAction = new BTExecuteAction(this, agent, ActionID.PICK_UP);
+        BTExecuteAction eatAction = new BTExecuteAction(this, agent, ActionID.EAT);
+        BTExecuteAction takeOutAction = new BTExecuteAction(this, agent, ActionID.TAKE_OUT);
 
-            //return AbstractBTNode.BTStatus.SUCCESS;
-        });
+        BTExecuteAgentAction attackAction = new BTExecuteAgentAction(agent, ActionID.ATTACK);
+        BTExecuteAgentAction dropAction = new BTExecuteAgentAction(agent, ActionID.DROP);
 
-        BTNode locateNearbyTree = new BTNode(() =>
-        {
-            //if(TargetObject == null)
-            //{
-            SmartObject tree = BTFindSomething.SearchClosest<SmartObject>("Tree", transform.position, 15);
-            if (tree != null)
-            {
-                MoveTarget = tree.transform.position;
-                TargetObject = tree;
-                return AbstractBTNode.BTStatus.SUCCESS;
-            }
-            return AbstractBTNode.BTStatus.FAILURE;
-            //}
+        BTPickRandomSpot pickRandomSpot = new BTPickRandomSpot(this);
+        BTSuccessToRunning neverSuccedingMoveTo = new BTSuccessToRunning(moveTo);
+        BTSequence randomWalk = new BTSequence("Random walk", pickRandomSpot, neverSuccedingMoveTo);
 
-            //return AbstractBTNode.BTStatus.SUCCESS;
-        });
+        BTSequence pickUpNearbyFoodSequence = new BTSequence("PickUpNearbyFood", findFood, moveTo, pickUpAction);
+        BTSuccessToRunning continuesPickUpNearbyFoodSequence = new BTSuccessToRunning(pickUpNearbyFoodSequence);
 
-        BTNode eatFoodInHand = new BTNode(() =>
-        {
-            if (carry.CarriedItem != null && carry.CarriedItem.TryGetAction(ActionID.EAT, out IEntityAction action))
-            {
-                agent.AddAction(action);
-                carry.CarriedItem = null;
-                return AbstractBTNode.BTStatus.SUCCESS;
-            }
-            return AbstractBTNode.BTStatus.FAILURE;
-        });
+        BTSuccessToFailure dropItemBecauseItIsWrong = new BTSuccessToFailure(dropAction);
+        BTSuccessToFailure ignoreSetCarriedObjectAsTargetForSelector = new BTSuccessToFailure(setCarriedObjectAsTarget);
 
-        BTNode putIntoStorage = new BTNode(() =>
-        {
-            agent.AddAction(FoodContainer.GetAction(ActionID.PUT_IN));
-            return AbstractBTNode.BTStatus.SUCCESS;
-        });
-
-        BTNode hasFood = new BTNode(() =>
-        {
-            return (carry.CarriedItem != null) ? AbstractBTNode.BTStatus.SUCCESS : AbstractBTNode.BTStatus.FAILURE;
-        });
-
-        BTNode attack = new BTNode(() =>
-        {
-            agent.AddAction(agent.GetAction(ActionID.ATTACK));
-            return AbstractBTNode.BTStatus.SUCCESS;
-        });
-
-        BTSequence pickUpNearbyFoodSequence = new BTSequence(locateNearbyFood, moveTo, pickUpTargetObject);
-        BTDecorator successToRunningDec1 = new BTDecorator(pickUpNearbyFoodSequence, SuccessToRunning);
+        BTSelector checkIfCarriedObjectIsEdible = new BTSelector("checkIfCarriedObjectIsEdible", ifTargetObjectIsEdible, dropItemBecauseItIsWrong);
+        BTSequence setAndCheckCarriedItemIsEdible = new BTSequence("setAndCheckCarriedItem", setCarriedObjectAsTarget, checkIfCarriedObjectIsEdible);
 
         #region Hungry, eat food
-        BTSequence takeFoodFromStorage = new BTSequence(selectFoodContainer, moveTo, takeOutFromStorage);
-        BTDecorator successToRunningDec2 = new BTDecorator(takeFoodFromStorage, SuccessToRunning);
+        BTSequence takeFoodFromStorage = new BTSequence("take food from storage", findFoodContainer, moveTo, takeOutAction);
+        BTSuccessToRunning continuesTakeFoodFromStorage = new BTSuccessToRunning(takeFoodFromStorage);
 
-        BTSelector eatSelector = new BTSelector(eatFoodInHand, successToRunningDec1, successToRunningDec2);
+        BTSequence eatFoodInHandSequence = new BTSequence("eat food in hand", setAndCheckCarriedItemIsEdible, eatAction);
+
+        BTSelector eatSelector = new BTSelector("eat", eatFoodInHandSequence, continuesPickUpNearbyFoodSequence, continuesTakeFoodFromStorage);
         IPlan eatFoodPlan = new BTRoot(eatSelector, this);
         Decision eatDecision = new Decision(eatFoodPlan, (_) => 1 - (hunger.Food / 100)); //Linear utility, depending on how much food left
         eatDecision.SuccessDecisionModifier.Set(0.15f, 0.5f);
         #endregion
 
         #region GatherFood
-        BTSequence putFoodIntoStorage = new BTSequence(hasFood, selectFoodContainer, moveTo, putIntoStorage);
+        BTSequence putFoodIntoStorage = new BTSequence("put food in storage", setAndCheckCarriedItemIsEdible, findFoodContainer, moveTo, putInAction);
 
-        BTSelector gatherFoodSelector = new BTSelector(putFoodIntoStorage, successToRunningDec1);
+        BTSelector gatherFoodSelector = new BTSelector("gather food", putFoodIntoStorage, continuesPickUpNearbyFoodSequence);
         IPlan gatherFoodPlan = new BTRoot(gatherFoodSelector, this);
 
         Decision gatherFoodDecision = new Decision(gatherFoodPlan, (_) => 0.6f);
@@ -174,26 +93,37 @@ public class HumanAI : AI
         gatherFoodDecision.FailedDecisionModifier.Set(-0.3f, 3f);
         #endregion
 
-        #region Cut Tree
-        BTSequence cutTreeSequence = new BTSequence(locateNearbyTree, moveTo, attack);
-        IPlan cutTreePlan = new BTRoot(cutTreeSequence, this);
-        Decision cutTreeDecision = new Decision(cutTreePlan, (_) => agent.Strength + 0.1f);
-        cutTreeDecision.FailedDecisionModifier.Set(-0.4f, 5f);
-        #endregion
+        #region Build House
+        BTTest enoughWood = new BTTest("Enough wood test", () => findConstructionSite.TargetObject.GetComponent<BuildComponent>(ComponentIDs.BUILD).AbleToBuild());
 
-        #region Gather wood
-        BTSequence gatherWoodSequence = new BTSequence(locateNearbyWood, moveTo, pickUpTargetObject);
-        IPlan gatherWoodPlan = new BTRoot(gatherWoodSequence, this);
-        Decision gatherWoodDecision = new Decision(gatherWoodPlan, (_) => 0.4f);
+        BTSelector checkIfCarriedObjectIsWood = new BTSelector("checkIfCarriedObjectIsWood", ifTargetObjectIsTypeWood, dropItemBecauseItIsWrong);
+        BTSequence setAndCheckCarriedItemIsWood = new BTSequence("setAndCheckCarriedItem", setCarriedObjectAsTarget, checkIfCarriedObjectIsWood);
+
+        BTSequence buildTargetSequence = new BTSequence("build target", enoughWood, moveTo, buildAction);
+        BTSequence bringWoodToConstructionSite = new BTSequence("bring wood to construction site", setAndCheckCarriedItemIsWood, findConstructionSite, moveTo, putInAction);
+        BTSequence gatherWoodSequence = new BTSequence("gather wood", findWood, moveTo, pickUpAction);
+        BTSequence cutTreeSequence = new BTSequence("cut tree sequence", findTree, moveTo, attackAction);
+        BTSelector cutTreeSelector = new BTSelector("cut tree selector", cutTreeSequence);//, randomWalk); //Random walk does not work
+
+        //BTSuccessToRunning continuesBuildTargetSequence = new BTSuccessToRunning(buildTargetSequence);
+        //BTSuccessToRunning continuesGatherWoodSequence = new BTSuccessToRunning(gatherWoodSequence);
+        //BTSuccessToRunning continuesCutTreeSelector = new BTSuccessToRunning(cutTreeSelector);
+
+        BTSelector buildHouseGatherWood = new BTSelector("build hosue gather resources", bringWoodToConstructionSite, gatherWoodSequence, cutTreeSequence);
+        BTSuccessToRunning continuesGatherWood = new BTSuccessToRunning(buildHouseGatherWood);
+
+        BTSelector buildHouseSelector = new BTSelector("build house selector", buildTargetSequence, continuesGatherWood);
+        BTSequence buildHouseSequence = new BTSequence("build house sequence", findConstructionSite, buildHouseSelector);
+        IPlan buildHousePlan = new BTRoot(buildHouseSequence, this);
+        Decision buildHouseDecision = new Decision(buildHousePlan, (_) => 0.4f);
         #endregion
 
         State idleState = new State();
         idleState.AddTransaction(hungry);
 
         idleState.AddDecision(eatDecision);
-        idleState.AddDecision(cutTreeDecision);
         idleState.AddDecision(gatherFoodDecision);
-        idleState.AddDecision(gatherWoodDecision);
+        idleState.AddDecision(buildHouseDecision);
 
         StateMachine stateMachine = new StateMachine(this);
 

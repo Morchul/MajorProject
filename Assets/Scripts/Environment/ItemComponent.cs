@@ -19,8 +19,6 @@ public class ItemComponent : EntityComponent
         };
     }
 
-    public override void Init(Entity entity) { }
-
     public SmartObject PickUpItem()
     {
         Item.SetToItem();

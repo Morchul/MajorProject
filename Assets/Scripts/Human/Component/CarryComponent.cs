@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class CarryComponent : EntityComponent
 {
     public override int ID => ComponentIDs.CARRY;
@@ -24,7 +20,16 @@ public class CarryComponent : EntityComponent
         IsNull = CarriedItem == null;
     }
 
-    public override ActionComponent[] GetComponentActions() => null;
-
-    public override void Init(Entity entity) { }
+    public override ActionComponent[] GetComponentActions()
+    {
+        return new ActionComponent[]
+        {
+            new ActionComponent()
+            {
+                ActionID = ActionID.DROP,
+                MaxContainerSize = 1,
+                StartContainerSize = 1
+            }
+        };
+    }
 }

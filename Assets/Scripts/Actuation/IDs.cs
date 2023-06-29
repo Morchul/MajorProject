@@ -8,8 +8,11 @@ public static class ComponentIDs
     public const int PICK_UP = 6;
     public const int ATTACK = 7;
     public const int ANIMATION = 8;
+    public const int HUMAN_PROPERTY = 9;
 
     public const int CONTAINER = 10;
+    public const int BUILD = 11;
+    public const int BUILDER = 12;
 
     public const int ITEM = 100;
 

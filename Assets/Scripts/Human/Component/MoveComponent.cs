@@ -59,6 +59,4 @@ public class MoveComponent : EntityComponent
         Vector3 rotation = new Vector3(0, Time.deltaTime * -TurnSpeed, 0);
         transform.Rotate(rotation);
     }
-
-    public override void Init(Entity entity) { }
 }

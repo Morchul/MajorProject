@@ -8,6 +8,7 @@ TagManager:
   - FoodContainer
   - Tree
   - Wood
+  - ConstructionSite
   layers:
   - Default
   - TransparentFX

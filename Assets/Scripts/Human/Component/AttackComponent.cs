@@ -24,7 +24,4 @@ public class AttackComponent : EntityComponent
             }
         };
     }
-
-    public override void Init(Entity entity) { }
-
 }

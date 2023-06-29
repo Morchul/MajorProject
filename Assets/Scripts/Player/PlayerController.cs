@@ -111,6 +111,15 @@ public class PlayerController : MonoBehaviour
                 ClearActions();
             }
         }
+        #region DEBUG
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                human.DebugActionRingBuffer();
+            }
+        }
+        #endregion
     }
 
     private void ClearActions()

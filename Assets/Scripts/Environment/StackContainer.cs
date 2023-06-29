@@ -1,14 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class StackContainer : ContainerComponent
 {
-    public Stack<SmartObject> foodStored;
+    public Stack<SmartObject> storage;
+
+    [SerializeField]
+    private ObjectType filter;
 
     public override void Init(Entity entity)
     {
-        foodStored = new Stack<SmartObject>(capacity);
+        storage = new Stack<SmartObject>(capacity);
 
         #region DEBUG
         renderer = GetComponent<Renderer>();
@@ -17,30 +19,36 @@ public class StackContainer : ContainerComponent
 
     public override void PutIn(SmartObject food)
     {
-        foodStored.Push(food);
+        storage.Push(food);
         #region DEBUG
-        Debug.Log($"Put food into Storage. Elements in container: {foodStored.Count}");
+        Debug.Log($"Put food into Storage. Elements in container: {storage.Count}");
         SetColor();
         #endregion
     }
 
     public override SmartObject TakeOut()
     {
-        if (foodStored.Count == 0) return null;
-        SmartObject item = foodStored.Pop();
+        if (storage.Count == 0) return null;
+        SmartObject item = storage.Pop();
         #region DEBUG
-        Debug.Log($"Took food out of Storage. Elements in container: {foodStored.Count}");
+        Debug.Log($"Took food out of Storage. Elements in container: {storage.Count}");
         SetColor();
         #endregion
         return item;
     }
 
-    public override bool Empty => foodStored.Count == 0;
+    public override bool Empty => storage.Count == 0;
+    public override int Count => storage.Count;
 
-    public override bool CanTake(SmartObject item) => foodStored.Count < capacity;
+    public override void Clear() => storage.Clear();
+
+    public override bool CanTake(SmartObject item)
+    {
+        return item.Type == filter && storage.Count < capacity;
+    }
 
     #region DEBUG
     private Renderer renderer;
-    private void SetColor() => renderer.material.color = new Color(0, (float)foodStored.Count / capacity, 0);
+    private void SetColor() => renderer.material.color = new Color(0, (float)storage.Count / capacity, 0);
     #endregion
 }
