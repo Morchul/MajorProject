@@ -1,4 +1,4 @@
-public abstract class AbstractStateTransaction : ITransaction
+public abstract class AbstractStateTransaction : IContinuesTransaction
 {
     protected readonly State otherState;
     protected readonly StateMachine stateMachine;

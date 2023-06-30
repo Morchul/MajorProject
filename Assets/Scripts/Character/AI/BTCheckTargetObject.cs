@@ -2,8 +2,8 @@ public class BTCheckTargetObject : AbstractBTNode
 {
     private readonly int checkForComponentID;
 
-    private readonly HumanAI ai;
-    public BTCheckTargetObject(HumanAI ai, int checkForComponentID)
+    private readonly CharacterBaseAI ai;
+    public BTCheckTargetObject(CharacterBaseAI ai, int checkForComponentID)
     {
         this.ai = ai;
         this.checkForComponentID = checkForComponentID;

@@ -29,7 +29,7 @@ public class TurnRightAction : BaseAction
 
         moveComponent.TurnRight();
     }
-    protected override int[] GetMandatoryComponentIDs() => new int[] { };
+    protected override int[] GetMandatoryComponentIDs() => new int[] { ComponentIDs.MOVE, ComponentIDs.ANIMATION };
 }
 
 public class TurnLeftAction : BaseAction

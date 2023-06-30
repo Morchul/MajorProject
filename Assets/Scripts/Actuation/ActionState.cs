@@ -27,7 +27,7 @@ public enum ActionState
 [System.Flags]
 public enum ActionLayers
 {
-    ALL = 0x1111,
+    ALL = 3,
     ARMS = 1,
     LEGS = 2,
 }

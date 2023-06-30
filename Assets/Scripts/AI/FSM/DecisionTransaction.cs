@@ -1,4 +1,4 @@
-public abstract class AbstractDecisionTransaction : ITransaction
+public abstract class AbstractDecisionTransaction : IContinuesTransaction
 {
     protected readonly AI ai;
 

@@ -13,6 +13,7 @@ public abstract class ContainerComponent : EntityComponent
 
     public abstract bool Empty { get; }
     public abstract int Count { get; }
+    public bool IsFull => Count == capacity;
 
     public abstract void Clear();
     public abstract bool CanTake(SmartObject item);

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class AI : MonoBehaviour
 {
-    protected ISensor sensor;
+    public ISensor Sensor { get; protected set; }
 
     protected IDecision currentDecision;
 
@@ -13,11 +13,11 @@ public abstract class AI : MonoBehaviour
 
     public void MakeNewDecision()
     {
-        if(sensor != null)
+        if(Sensor != null)
         {
             if(currentDecision != null)
                 currentDecision.Stop();
-            currentDecision = sensor.MakeDecision();
+            currentDecision = Sensor.MakeDecision();
             currentDecision.Select();
             //Debug.Log($"Next decision: {currentDecision}");
         }
@@ -25,7 +25,7 @@ public abstract class AI : MonoBehaviour
 
     private void Update()
     {
-        sensor.Update();
+        Sensor.Update();
         if(currentDecision != null)
             currentDecision.Update();
     }

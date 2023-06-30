@@ -15,7 +15,7 @@ public class BTRoot : IPlan
     {
         AbstractBTNode.BTStatus status = startNode.Tick();
 
-        Debug.Log("BT ROOT FINISHED WITH: " + status);
+        //Debug.Log("BT ROOT FINISHED WITH: " + status);
         if(status == AbstractBTNode.BTStatus.SUCCESS ||
             status == AbstractBTNode.BTStatus.FAILURE)
         {

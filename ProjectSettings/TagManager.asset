@@ -9,6 +9,7 @@ TagManager:
   - Tree
   - Wood
   - ConstructionSite
+  - Blob
   layers:
   - Default
   - TransparentFX

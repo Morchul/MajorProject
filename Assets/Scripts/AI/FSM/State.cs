@@ -1,13 +1,19 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class State
 {
-    private readonly List<ITransaction> transactions;
+    private readonly List<IContinuesTransaction> transactions;
+    private readonly List<ITriggerTransaction> triggers;
     private readonly List<IDecision> decisions;
 
-    public State()
+    public readonly string Name;
+
+    public State(string name)
     {
-        transactions = new List<ITransaction>();
+        Name = name;
+        transactions = new List<IContinuesTransaction>();
+        triggers = new List<ITriggerTransaction>();
         decisions = new List<IDecision>();
     }
 
@@ -16,7 +22,7 @@ public class State
 
     public void Update()
     {
-        foreach (ITransaction transaction in transactions)
+        foreach (IContinuesTransaction transaction in transactions)
             transaction.Update();
     }
 
@@ -25,8 +31,19 @@ public class State
         foreach (Decision decision in decisions) decision.Reset();
     }
 
+    public void Trigger(int type)
+    {
+        Debug.Log("Go through triggers");
+        foreach(ITriggerTransaction trigger in triggers)
+        {
+            if(type == trigger.Type)
+                trigger.Trigger();
+        }
+    }
+
     public void AddDecision(IDecision decision) => decisions.Add(decision);
     public List<IDecision> GetDecisions() => decisions;
 
-    public void AddTransaction(ITransaction transaction) => transactions.Add(transaction);
+    public void AddTransaction(IContinuesTransaction transaction) => transactions.Add(transaction);
+    public void AddTransaction(ITriggerTransaction transaction) => triggers.Add(transaction);
 }

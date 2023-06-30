@@ -16,6 +16,7 @@ public class StateMachine : ISensor
 
     public void SetState(State state)
     {
+        Debug.Log("Set state: " + state.Name);
         if(currentState != null)
             currentState.ResetDecisions();
         deltaTimeSinceLastDecision = 0;
@@ -50,5 +51,10 @@ public class StateMachine : ISensor
     {
         deltaTimeSinceLastDecision += Time.deltaTime;
         currentState.Update();
+    }
+
+    public void Trigger(int type)
+    {
+        currentState.Trigger(type);
     }
 }

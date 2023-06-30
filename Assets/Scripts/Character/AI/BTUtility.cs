@@ -34,9 +34,9 @@ public class BTExecuteAction : AbstractBTNode
 {
     private readonly ActionID actionID;
     private readonly ActionEntity agent;
-    private readonly HumanAI ai;
+    private readonly CharacterBaseAI ai;
 
-    public BTExecuteAction(HumanAI ai, ActionEntity agent, ActionID actionID)
+    public BTExecuteAction(CharacterBaseAI ai, ActionEntity agent, ActionID actionID)
     {
         this.agent = agent;
         this.actionID = actionID;

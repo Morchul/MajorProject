@@ -7,7 +7,7 @@ public class ItemSpawner : MonoBehaviour
     [System.Serializable]
     public struct SpawnDetails
     {
-        public SmartObject Prefab;
+        public Entity Prefab;
         public float Interval;
         private float timer;
 
@@ -47,7 +47,7 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-    private void Spawn(SmartObject prefab)
+    private void Spawn(Entity prefab)
     {
         Instantiate(prefab, Utility.RandomVector2(-10, 10, -10, 10).ToVector3_XZ(), Quaternion.identity);
     }

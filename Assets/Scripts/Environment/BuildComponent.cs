@@ -28,10 +28,7 @@ public class BuildComponent : EntityComponent
         container = entity.GetComponent<ContainerComponent>(ComponentIDs.CONTAINER);
     }
 
-    public virtual bool AbleToBuild()
-    {
-        return container.Count == 10;
-    }
+    public virtual bool AbleToBuild() => container.IsFull;
 
     public void Build(int strength)
     {

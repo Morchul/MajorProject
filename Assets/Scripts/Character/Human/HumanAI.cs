@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class HumanAI : CharacterBaseAI
 {
-    private Human agent;
-
     [Header("Components")]
     [SerializeField]
     private HungerComponent hunger;
@@ -14,9 +12,16 @@ public class HumanAI : CharacterBaseAI
 
     protected override void Start()
     {
-        agent = GetComponent<Human>();
+        base.Start();
 
-        DecisionTransaction hungry = new DecisionTransaction(this, () => hunger.Food < 40, () => hunger.Food > 40);
+        State idleState = new State("Human Idle");
+        State combatState = new State("Human combat");
+
+        IContinuesTransaction hungry = new DecisionTransaction(this, () => hunger.Food < 40, () => hunger.Food > 40);
+        ITriggerTransaction enterCombat = new TriggerTransaction(0, combatState, stateMachine, () => BTUtility.SearchClosest<Entity>("Blob", agent.transform.position, 15) != null);
+        ITriggerTransaction exitCombat = new TriggerTransaction(0, idleState, stateMachine, () => BTUtility.SearchClosest<Entity>("Blob", agent.transform.position, 15) == null);
+
+        BTExecuteAgentAction attackAction = new BTExecuteAgentAction(agent, ActionID.ATTACK);
 
         BTMoveTo moveTo = new BTMoveTo(agent, this);
         moveTo.MaxDistanceSqrt = 4;
@@ -35,22 +40,13 @@ public class HumanAI : CharacterBaseAI
              
         });
 
-        BTFindTarget findConstructionSite = new BTFindTarget(this, "ConstructionSite", agent.transform, 15);
-        BTSetTarget setConstructionSite = new BTSetTarget(findConstructionSite);
-        BTFindTarget findWood = new BTFindTarget(this, "Wood", agent.transform, 15);
-        BTSetTarget setWood = new BTSetTarget(findWood);
-        BTFindTarget findTree = new BTFindTarget(this, "Tree", agent.transform, 15);
-        BTFindTarget findFood = new BTFindTarget(this, "Food", agent.transform, 15);
-        BTFindTarget findFoodContainer = new BTFindTarget(this, "FoodContainer", agent.transform, 15);
-
-        BTExecuteAction putInAction = new BTExecuteAction(this, agent, ActionID.PUT_IN);
-        BTExecuteAction buildAction = new BTExecuteAction(this, agent, ActionID.BUILD);
-        BTExecuteAction pickUpAction = new BTExecuteAction(this, agent, ActionID.PICK_UP);
-        BTExecuteAction eatAction = new BTExecuteAction(this, agent, ActionID.EAT);
-        BTExecuteAction takeOutAction = new BTExecuteAction(this, agent, ActionID.TAKE_OUT);
-
-        BTExecuteAgentAction attackAction = new BTExecuteAgentAction(agent, ActionID.ATTACK);
-        BTExecuteAgentAction dropAction = new BTExecuteAgentAction(agent, ActionID.DROP);
+        BTFindTargetObject findConstructionSite = new BTFindTargetObject(this, "ConstructionSite", agent.transform, 15);
+        BTSetTargetObject setConstructionSite = new BTSetTargetObject(findConstructionSite);
+        BTFindTargetObject findWood = new BTFindTargetObject(this, "Wood", agent.transform, 15);
+        BTSetTargetObject setWood = new BTSetTargetObject(findWood);
+        BTFindTargetObject findTree = new BTFindTargetObject(this, "Tree", agent.transform, 15);
+        BTFindTargetObject findFood = new BTFindTargetObject(this, "Food", agent.transform, 15);
+        BTFindTargetObject findFoodContainer = new BTFindTargetObject(this, "FoodContainer", agent.transform, 15);
 
         BTPickRandomSpot pickRandomSpot = new BTPickRandomSpot(this);
         BTSuccessToRunning neverSuccedingMoveTo = new BTSuccessToRunning(moveTo);
@@ -60,7 +56,7 @@ public class HumanAI : CharacterBaseAI
         BTSuccessToRunning continuesPickUpNearbyFoodSequence = new BTSuccessToRunning(pickUpNearbyFoodSequence);
 
         BTSuccessToFailure dropItemBecauseItIsWrong = new BTSuccessToFailure(dropAction);
-        BTSuccessToFailure ignoreSetCarriedObjectAsTargetForSelector = new BTSuccessToFailure(setCarriedObjectAsTarget);
+        //BTSuccessToFailure ignoreSetCarriedObjectAsTargetForSelector = new BTSuccessToFailure(setCarriedObjectAsTarget);
 
         BTSelector checkIfCarriedObjectIsEdible = new BTSelector("checkIfCarriedObjectIsEdible", ifTargetObjectIsEdible, dropItemBecauseItIsWrong);
         BTSequence setAndCheckCarriedItemIsEdible = new BTSequence("setAndCheckCarriedItem", setCarriedObjectAsTarget, checkIfCarriedObjectIsEdible);
@@ -113,18 +109,27 @@ public class HumanAI : CharacterBaseAI
         Decision buildHouseDecision = new Decision(buildHousePlan, (_) => 0.4f);
         #endregion
 
-        State idleState = new State();
+        #region Attack Blob
+
+        BTFindTargetEntity findBlob = new BTFindTargetEntity(this, "Blob", agent.transform, 15);
+        BTTriggerTransaction exitCombatTrigger = new BTTriggerTransaction(exitCombat);
+
+        BTSequence killBlobSequence = new BTSequence("Kill blob", findBlob, moveTo, attackAction);
+        BTSelector killBlobSelector = new BTSelector("Kill blob selector", killBlobSequence, exitCombatTrigger);
+        IPlan killBlobPlan = new BTRoot(killBlobSelector, this);
+        IDecision killBlob = new Decision(killBlobPlan, (_) => 1f);
+        #endregion
+
         idleState.AddTransaction(hungry);
 
         idleState.AddDecision(eatDecision);
         idleState.AddDecision(gatherFoodDecision);
         idleState.AddDecision(buildHouseDecision);
 
-        State combatState = new State();
+        combatState.AddDecision(killBlob);
 
-        StateMachine stateMachine = new StateMachine(this);
-
-        sensor = stateMachine;
+        idleState.AddTransaction(enterCombat);
+        combatState.AddTransaction(exitCombat);
 
         stateMachine.SetState(idleState);
     }

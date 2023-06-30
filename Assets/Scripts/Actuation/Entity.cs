@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Entity : MonoBehaviour
 {
-    protected EntityComponent[] components { get; set; }
+    protected EntityComponent[] components;
  
     protected virtual void Awake()
     {
