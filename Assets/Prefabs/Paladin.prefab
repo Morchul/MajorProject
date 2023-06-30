@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3573442480945293328}
   - component: {fileID: 1193528677448526831}
   - component: {fileID: 4236208935505444532}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetObject: {fileID: 0}
+  TargetEntity: {fileID: 0}
   MoveTarget: {x: 0, y: 0, z: 0}
   hunger: {fileID: 3570184453637791123}
   carry: {fileID: 3570184453637791120}
