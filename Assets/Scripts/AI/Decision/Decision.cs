@@ -2,8 +2,6 @@ public abstract class AbstractDecision : IDecision
 {
     protected readonly IPlan plan;
 
-    private PlanState modifier;
-
     private DecisionModifier activeModifier;
 
     public float Modifier { get; private set; }
@@ -31,7 +29,7 @@ public abstract class AbstractDecision : IDecision
     /// </summary>
     public void Stop()
     {
-        activeModifier = modifier switch
+        activeModifier = plan.CurrentState switch
         {
             PlanState.RUNNING => RunningDecisionModifier,
             PlanState.FAILURE => FailedDecisionModifier,
@@ -55,7 +53,7 @@ public abstract class AbstractDecision : IDecision
     /// </summary>
     public virtual void Update()
     {
-        modifier = plan.Update();
+        plan.Update();
     }
 
     /// <summary>
@@ -65,7 +63,7 @@ public abstract class AbstractDecision : IDecision
     protected abstract float CalculateUtility();
 
     public virtual IPlan GetPlan() => plan;
-    public virtual void Reset() => modifier = 0;
+    public virtual void Reset() => activeModifier.Reset();
 }
 
 public class Decision : AbstractDecision

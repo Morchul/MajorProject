@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class State
 {
-    private readonly List<IContinuesTransaction> transactions;
+    private readonly List<IContinuesTransaction> transitions;
     private readonly List<ITriggerTransaction> triggers;
     private readonly List<IDecision> decisions;
 
@@ -12,7 +12,7 @@ public class State
     public State(string name)
     {
         Name = name;
-        transactions = new List<IContinuesTransaction>();
+        transitions = new List<IContinuesTransaction>();
         triggers = new List<ITriggerTransaction>();
         decisions = new List<IDecision>();
     }
@@ -22,7 +22,7 @@ public class State
 
     public void Update()
     {
-        foreach (IContinuesTransaction transaction in transactions)
+        foreach (IContinuesTransaction transaction in transitions)
             transaction.Update();
     }
 
@@ -44,6 +44,6 @@ public class State
     public void AddDecision(IDecision decision) => decisions.Add(decision);
     public List<IDecision> GetDecisions() => decisions;
 
-    public void AddTransaction(IContinuesTransaction transaction) => transactions.Add(transaction);
+    public void AddTransaction(IContinuesTransaction transaction) => transitions.Add(transaction);
     public void AddTransaction(ITriggerTransaction transaction) => triggers.Add(transaction);
 }

@@ -24,12 +24,6 @@ public static class Extensions
 
     public static PlanState GetPlanState(this AbstractBTNode.BTStatus status)
     {
-        return status switch
-        {
-            AbstractBTNode.BTStatus.RUNNING => PlanState.RUNNING,
-            AbstractBTNode.BTStatus.SUCCESS => PlanState.SUCCESSFUL,
-            AbstractBTNode.BTStatus.FAILURE => PlanState.FAILURE,
-            _ => PlanState.FAILURE
-        };
+        return (PlanState)(int)status;
     }
 }

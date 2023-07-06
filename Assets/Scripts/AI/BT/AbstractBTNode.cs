@@ -7,9 +7,10 @@ public abstract class AbstractBTNode
 
     public enum BTStatus
     {
-        FAILURE,
-        SUCCESS,
-        RUNNING
+        //Values adapted from PlanState
+        FAILURE = 2,
+        SUCCESS = 1,
+        RUNNING = 0
     }
 }
 

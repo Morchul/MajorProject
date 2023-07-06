@@ -36,4 +36,9 @@ public struct DecisionModifier
     {
         modifierTimeInfluence = ModifierTime;
     }
+
+    public void Reset()
+    {
+        modifierTimeInfluence = 0;
+    }
 }
