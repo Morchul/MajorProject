@@ -33,10 +33,10 @@ public static class BTUtility
 public class BTExecuteAction : AbstractBTNode
 {
     private readonly ActionID actionID;
-    private readonly ActionEntity agent;
+    private readonly Agent agent;
     private readonly CharacterBaseAI ai;
 
-    public BTExecuteAction(CharacterBaseAI ai, ActionEntity agent, ActionID actionID)
+    public BTExecuteAction(CharacterBaseAI ai, Agent agent, ActionID actionID)
     {
         this.agent = agent;
         this.actionID = actionID;
@@ -60,9 +60,9 @@ public class BTExecuteAction : AbstractBTNode
 public class BTExecuteAgentAction : AbstractBTNode
 {
     private readonly IEntityAction action;
-    private readonly ActionEntity agent;
+    private readonly Agent agent;
 
-    public BTExecuteAgentAction(ActionEntity agent, ActionID actionID)
+    public BTExecuteAgentAction(Agent agent, ActionID actionID)
     {
         this.agent = agent;
         Name = "Execute agent action: " + actionID;

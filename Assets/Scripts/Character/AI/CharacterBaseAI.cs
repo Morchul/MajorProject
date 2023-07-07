@@ -10,7 +10,7 @@ public abstract class CharacterBaseAI : AI
 
     public Vector3 MoveTarget;
 
-    protected ActionEntity agent;
+    protected Agent agent;
 
     protected BTExecuteAction putInAction;
     protected BTExecuteAction buildAction;
@@ -27,7 +27,7 @@ public abstract class CharacterBaseAI : AI
         stateMachine = new StateMachine(this);
         Sensor = stateMachine;
 
-        agent = GetComponent<ActionEntity>();
+        agent = GetComponent<Agent>();
 
         putInAction = new BTExecuteAction(this, agent, ActionID.PUT_IN);
         buildAction = new BTExecuteAction(this, agent, ActionID.BUILD);

@@ -8,12 +8,12 @@ public class BTMoveTo : AbstractBTNode
     private readonly IEntityAction turnRight;
     private readonly IEntityAction turnLeft;
 
-    private readonly ActionEntity entity;
+    private readonly Agent entity;
     private readonly CharacterBaseAI ai;
 
     public float MaxDistanceSqrt { get; set; }
 
-    public BTMoveTo(ActionEntity entity, CharacterBaseAI ai)
+    public BTMoveTo(Agent entity, CharacterBaseAI ai)
     {
         this.entity = entity;
         this.ai = ai;

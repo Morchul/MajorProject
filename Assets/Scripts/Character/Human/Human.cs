@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Human : ActionEntity
+public class Human : Agent
 {
     public void DebugActionRingBuffer()
     {
