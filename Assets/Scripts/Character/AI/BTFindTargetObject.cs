@@ -27,7 +27,7 @@ public class BTFindTargetObject : AbstractBTNode
     public void SetActive()
     {
         ai.TargetObject = TargetObject;
-        ai.MoveTarget = TargetObject.transform.position;
+        //ai.MoveTarget = TargetObject.transform.position;
     }
 
     public override BTStatus Tick()
@@ -37,7 +37,6 @@ public class BTFindTargetObject : AbstractBTNode
         //    SetActive();
         //    return BTStatus.SUCCESS;
         //}
-
         TargetObject = BTUtility.SearchClosest<SmartObject>(searchTag, pos.position, radius);
         if (TargetObject == null)
         {
@@ -127,7 +126,6 @@ public class BTFindTargetEntity : AbstractBTNode
     public void SetActive()
     {
         ai.TargetEntity = TargetEntity;
-        ai.MoveTarget = TargetEntity.transform.position;
     }
 
     public override BTStatus Tick()

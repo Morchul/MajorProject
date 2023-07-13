@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EdibleComponent : SmartObjectComponent
+public class EdibleComponent : EntityComponent
 {
     public float Amount;
 

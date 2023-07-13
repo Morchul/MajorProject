@@ -11,7 +11,8 @@ public enum ActionID : int
     TAKE_OUT,
     ATTACK,
     DROP,
-    BUILD
+    BUILD,
+    MOVE,
 }
 
 public enum ActionState

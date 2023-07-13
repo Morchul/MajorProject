@@ -12,9 +12,6 @@ public class BlobAI : CharacterBaseAI
     {
         base.Start();
 
-        BTMoveTo moveTo = new BTMoveTo(agent, this);
-        moveTo.MaxDistanceSqrt = 4;
-
         BTFindTargetObject findFood = new BTFindTargetObject(this, "Food", agent.transform, 10);
         BTFindTargetObject findFoodContainer = new BTFindTargetObject(this, "FoodContainer", agent.transform, 10);
 

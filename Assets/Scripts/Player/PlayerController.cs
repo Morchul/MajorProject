@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private Human human;
+
+    [SerializeField]
+    private Camera cam;
     private HumanAI ai;
 
     private bool hasControl;
@@ -19,9 +23,14 @@ public class PlayerController : MonoBehaviour
     public IEntityAction action2;
     public IEntityAction action3;
 
+    private NavMeshAgent navMeshAgent;
+
     private void Start()
     {
         ai = human.GetComponent<HumanAI>();
+
+        navMeshAgent = human.GetComponent<NavMeshAgent>();
+
         moveForward = human.GetAction(ActionID.MOVE_FORWARD);
         turnLeft = human.GetAction(ActionID.TURN_LEFT);
         turnRight = human.GetAction(ActionID.TURN_RIGHT);
@@ -57,7 +66,26 @@ public class PlayerController : MonoBehaviour
         ClearActions();
     }
 
-    private void Update()
+    private void CalcPath(Vector3 target)
+    {
+        //Debug.Log("Calc path to: " + MoveTarget);
+        NavMeshPath path = new NavMeshPath();
+        if (navMeshAgent.CalculatePath(target, path))
+        {
+            Debug.Log("Path found");
+        }
+        else
+        {
+            Debug.Log("Path not found");
+        }
+        Debug.Log($"Final path with {path.corners.Length} corners");
+        for (int i = 0; i < path.corners.Length; ++i)
+        {
+            Debug.Log($"Corner {i}: {path.corners[i]}");
+        }
+    }
+
+        private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -66,6 +94,17 @@ public class PlayerController : MonoBehaviour
 
         if (hasControl)
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+                if(Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    CalcPath(hit.point);
+                }
+                
+            }
+
             if(Input.GetKeyDown(KeyCode.W))
             {
                 human.AddAction(moveForward);

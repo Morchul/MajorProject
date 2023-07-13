@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionEntity : Entity, IHasActions, IAgent
+public class Agent : Entity, IHasActions, IAgent
 {
     protected ActionRingBuffer ringBuffer;
     protected IAction nextAction;

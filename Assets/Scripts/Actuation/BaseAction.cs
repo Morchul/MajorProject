@@ -7,7 +7,6 @@ public abstract class BaseAction : IEntityAction
     public abstract string Name { get; }
     public abstract ActionID ID { get; }
 
-    public virtual int ActionUsage => 0;
     public event Action OnInactive;
 
     public BaseAction()

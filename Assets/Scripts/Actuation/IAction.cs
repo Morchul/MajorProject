@@ -13,14 +13,11 @@ public interface IAction
 
 public interface IEntityAction : IAction
 {
-    public void Init(Entity entity);
     public ActionID ID { get; }
-
-    public int ActionUsage { get; }
 
     public event System.Action OnInactive;
 
+    public void Init(Entity entity);
     public bool CanBeExecutedBy(Entity entity);
-
     public void OnReturn();
 }

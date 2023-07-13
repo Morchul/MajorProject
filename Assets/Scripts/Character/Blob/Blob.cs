@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Blob : ActionEntity
+public class Blob : Agent
 {
     protected override void Awake()
     {

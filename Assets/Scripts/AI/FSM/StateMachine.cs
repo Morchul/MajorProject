@@ -16,7 +16,7 @@ public class StateMachine : ISensor
 
     public void SetState(State state)
     {
-        Debug.Log("Set state: " + state.Name);
+        //Debug.Log("Set state: " + state.Name);
         if(currentState != null)
             currentState.ResetDecisions();
         deltaTimeSinceLastDecision = 0;

@@ -10,7 +10,7 @@ public class BTSequence : BTComposite
         foreach(AbstractBTNode node in children)
         {
             BTStatus state = node.Tick();
-            Debug.Log($"node {node.Name} finished with state: {state}");
+            //Debug.Log($"node {node.Name} finished with state: {state}");
             if (state == BTStatus.FAILURE || state == BTStatus.RUNNING) return state;
         }
 

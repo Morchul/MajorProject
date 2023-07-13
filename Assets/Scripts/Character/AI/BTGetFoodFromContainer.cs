@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class BTGetFoodFromContainer : AbstractBTNode
 {
-    private readonly List<ContainerComponent> knownFoodContainer;
+    private readonly List<SmartObject> knownFoodContainer;
     private readonly HumanAI ai;
 
     public BTGetFoodFromContainer(HumanAI ai)
     {
-        knownFoodContainer = new List<ContainerComponent>();
+        knownFoodContainer = new List<SmartObject>();
         this.ai = ai;
     }
 
@@ -22,9 +22,9 @@ public class BTGetFoodFromContainer : AbstractBTNode
     {
         if (knownFoodContainer.Count > 0)
         {
-            if(!knownFoodContainer[0].Empty)
+            if(!knownFoodContainer[0].GetComponent<ContainerComponent>(ComponentIDs.CONTAINER).Empty)
             {
-                ai.MoveTarget = knownFoodContainer[0].transform.position;
+                ai.TargetEntity = knownFoodContainer[0];
                 return BTStatus.SUCCESS;
             }
         }
@@ -37,7 +37,7 @@ public class BTGetFoodFromContainer : AbstractBTNode
                 {
                     if(colliders[i].CompareTag("FoodContainer"))
                     {
-                        ContainerComponent container = colliders[i].GetComponent<ContainerComponent>();
+                        SmartObject container = colliders[i].GetComponent<SmartObject>();
                         if (container == null)
                             return BTStatus.FAILURE;
                         else

@@ -11,6 +11,7 @@ public static class GlobalActionFactory
     public static ActionFactory MoveBackwardFactory = new ActionFactory(() => new MoveBackwardAction(), ActionID.MOVE_BACKWARD);
     public static ActionFactory DropFactory = new ActionFactory(() => new DropAction(), ActionID.DROP);
     public static ActionFactory BuildFactory = new ActionFactory(() => new BuildAction(), ActionID.BUILD);
+    public static ActionFactory MoveFactory = new ActionFactory(() => new MoveAction(), ActionID.MOVE);
 
     public static ActionFactory GetFactory(ActionID actionID)
     {
@@ -27,6 +28,7 @@ public static class GlobalActionFactory
             ActionID.MOVE_BACKWARD => MoveBackwardFactory,
             ActionID.DROP => DropFactory,
             ActionID.BUILD => BuildFactory,
+            ActionID.MOVE => MoveFactory,
             _ => null
         };
     }

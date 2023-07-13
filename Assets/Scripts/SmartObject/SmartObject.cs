@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmartObject : Entity, ISmartObject
+public class SmartObject : Entity, IHasActions
 {
     [SerializeField]
     protected ObjectType type;
@@ -36,11 +35,6 @@ public class SmartObject : Entity, ISmartObject
         transform.position = pos;
         gameObject.SetActive(true);
         OnObjectStateChange?.Invoke();
-    }
-
-    public void Destory()
-    {
-
     }
 
     protected override void Awake()

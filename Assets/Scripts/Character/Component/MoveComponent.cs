@@ -19,6 +19,12 @@ public class MoveComponent : EntityComponent
             },
             new ActionComponent()
             {
+                ActionID = ActionID.MOVE,
+                MaxContainerSize = 1,
+                StartContainerSize = 1
+            },
+            new ActionComponent()
+            {
                 ActionID = ActionID.MOVE_BACKWARD,
                 MaxContainerSize = 1,
                 StartContainerSize = 1
@@ -36,6 +42,11 @@ public class MoveComponent : EntityComponent
                 StartContainerSize = 1
             }
         };
+    }
+
+    public void Move(Vector3 moveDir)
+    {
+        transform.Translate(moveDir * Time.deltaTime);
     }
 
     public void MoveForward()

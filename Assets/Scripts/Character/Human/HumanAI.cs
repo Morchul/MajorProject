@@ -10,9 +10,14 @@ public class HumanAI : CharacterBaseAI
     [SerializeField]
     private HumanPropertyComponent properties;
 
+    [SerializeField]
+    private Transform moveToDebugObject;
+
     protected override void Start()
     {
         base.Start();
+
+        moveTo.debugObject = moveToDebugObject;
 
         State idleState = new State("Human Idle");
         State combatState = new State("Human combat");
@@ -23,8 +28,6 @@ public class HumanAI : CharacterBaseAI
 
         BTExecuteAgentAction attackAction = new BTExecuteAgentAction(agent, ActionID.ATTACK);
 
-        BTMoveTo moveTo = new BTMoveTo(agent, this);
-        moveTo.MaxDistanceSqrt = 4;
         BTCheckTargetObject ifTargetObjectIsEdible = new BTCheckTargetObject(this, ComponentIDs.EDIBLE);
         BTCheckTargetObjectType ifTargetObjectIsTypeWood = new BTCheckTargetObjectType(this, ObjectType.WOOD);
 
@@ -52,7 +55,7 @@ public class HumanAI : CharacterBaseAI
         BTSuccessToRunning neverSuccedingMoveTo = new BTSuccessToRunning(moveTo);
         BTSequence randomWalk = new BTSequence("Random walk", pickRandomSpot, neverSuccedingMoveTo);
 
-        BTSequence pickUpNearbyFoodSequence = new BTSequence("PickUpNearbyFood", findFood, moveTo, pickUpAction);
+        BTSequence pickUpNearbyFoodSequence = new BTSequence("PickUpNearbyFood", findFood, moveToTargetObject, pickUpAction);
         BTSuccessToRunning continuesPickUpNearbyFoodSequence = new BTSuccessToRunning(pickUpNearbyFoodSequence);
 
         BTSuccessToFailure dropItemBecauseItIsWrong = new BTSuccessToFailure(dropAction);
@@ -62,7 +65,7 @@ public class HumanAI : CharacterBaseAI
         BTSequence setAndCheckCarriedItemIsEdible = new BTSequence("setAndCheckCarriedItem", setCarriedObjectAsTarget, checkIfCarriedObjectIsEdible);
 
         #region Hungry, eat food
-        BTSequence takeFoodFromStorage = new BTSequence("take food from storage", findFoodContainer, moveTo, takeOutAction);
+        BTSequence takeFoodFromStorage = new BTSequence("take food from storage", findFoodContainer, moveToTargetObject, takeOutAction);
         BTSuccessToRunning continuesTakeFoodFromStorage = new BTSuccessToRunning(takeFoodFromStorage);
 
         BTSequence eatFoodInHandSequence = new BTSequence("eat food in hand", setAndCheckCarriedItemIsEdible, eatAction);
@@ -74,7 +77,7 @@ public class HumanAI : CharacterBaseAI
         #endregion
 
         #region GatherFood
-        BTSequence putFoodIntoStorage = new BTSequence("put food in storage", setAndCheckCarriedItemIsEdible, findFoodContainer, moveTo, putInAction);
+        BTSequence putFoodIntoStorage = new BTSequence("put food in storage", setAndCheckCarriedItemIsEdible, findFoodContainer, moveToTargetObject, putInAction);
 
         BTSelector gatherFoodSelector = new BTSelector("gather food", putFoodIntoStorage, continuesPickUpNearbyFoodSequence);
         IPlan gatherFoodPlan = new BTRoot(gatherFoodSelector, this);
@@ -90,10 +93,10 @@ public class HumanAI : CharacterBaseAI
         BTSelector checkIfCarriedObjectIsWood = new BTSelector("checkIfCarriedObjectIsWood", ifTargetObjectIsTypeWood, dropItemBecauseItIsWrong);
         BTSequence setAndCheckCarriedItemIsWood = new BTSequence("setAndCheckCarriedItem", setCarriedObjectAsTarget, checkIfCarriedObjectIsWood);
 
-        BTSequence buildTargetSequence = new BTSequence("build target", enoughWood, moveTo, buildAction);
-        BTSequence bringWoodToConstructionSite = new BTSequence("bring wood to construction site", setAndCheckCarriedItemIsWood, findConstructionSite, moveTo, putInAction);
-        BTSequence gatherWoodSequence = new BTSequence("gather wood", findWood, moveTo, pickUpAction);
-        BTSequence cutTreeSequence = new BTSequence("cut tree sequence", findTree, moveTo, attackAction);
+        BTSequence buildTargetSequence = new BTSequence("build target", enoughWood, moveToTargetObject, buildAction);
+        BTSequence bringWoodToConstructionSite = new BTSequence("bring wood to construction site", setAndCheckCarriedItemIsWood, findConstructionSite, moveToTargetObject, putInAction);
+        BTSequence gatherWoodSequence = new BTSequence("gather wood", findWood, moveToTargetObject, pickUpAction);
+        BTSequence cutTreeSequence = new BTSequence("cut tree sequence", findTree, moveToTargetObject, attackAction);
         BTSelector cutTreeSelector = new BTSelector("cut tree selector", cutTreeSequence);//, randomWalk); //Random walk does not work
 
         //BTSuccessToRunning continuesBuildTargetSequence = new BTSuccessToRunning(buildTargetSequence);
@@ -114,7 +117,7 @@ public class HumanAI : CharacterBaseAI
         BTFindTargetEntity findBlob = new BTFindTargetEntity(this, "Blob", agent.transform, 15);
         BTTriggerTransaction exitCombatTrigger = new BTTriggerTransaction(exitCombat);
 
-        BTSequence killBlobSequence = new BTSequence("Kill blob", findBlob, moveTo, attackAction);
+        BTSequence killBlobSequence = new BTSequence("Kill blob", findBlob, moveToTargetEntity, attackAction);
         BTSelector killBlobSelector = new BTSelector("Kill blob selector", killBlobSequence, exitCombatTrigger);
         IPlan killBlobPlan = new BTRoot(killBlobSelector, this);
         IDecision killBlob = new Decision(killBlobPlan, (_) => 1f);
