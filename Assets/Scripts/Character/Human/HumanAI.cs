@@ -17,7 +17,7 @@ public class HumanAI : CharacterBaseAI
     {
         base.Start();
 
-        moveTo.debugObject = moveToDebugObject;
+        //moveTo.debugObject = moveToDebugObject;
 
         State idleState = new State("Human Idle");
         State combatState = new State("Human combat");

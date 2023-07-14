@@ -26,11 +26,7 @@ public abstract class CharacterBaseAI : AI
 
     protected StateMachine stateMachine;
 
-    public Vector3 MoveTarget
-    {
-        get => moveTo.MoveTarget;
-        set => moveTo.SetTarget(value);
-    }
+    public Vector3 MoveTarget;
 
     protected override void Start()
     {
@@ -39,20 +35,20 @@ public abstract class CharacterBaseAI : AI
 
         agent = GetComponent<Agent>();
 
-        moveTo = new BTMoveTo(agent);
+        moveTo = new BTMoveTo(agent, this);
         moveTo.MaxDistanceSqrt = 2;
 
 
         BTNode setTargetObjectAsMoveTarget = new BTNode("set target obj as move target", () =>
         {
             Debug.Log("TARGET OBJECT IS: " + TargetObject.name);
-            moveTo.SetTarget(TargetObject.transform.position);
+            MoveTarget = TargetObject.transform.position;
             return AbstractBTNode.BTStatus.SUCCESS;
         });
 
         BTNode setTargetEntityAsMoveTarget = new BTNode("set target obj as move target", () =>
         {
-            moveTo.SetTarget(TargetEntity.transform.position);
+        MoveTarget = TargetEntity.transform.position;
             return AbstractBTNode.BTStatus.SUCCESS;
         });
 
