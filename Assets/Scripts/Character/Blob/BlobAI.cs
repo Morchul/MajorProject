@@ -15,7 +15,7 @@ public class BlobAI : CharacterBaseAI
         BTFindTargetObject findFood = new BTFindTargetObject(this, "Food", agent.transform, 10);
         BTFindTargetObject findFoodContainer = new BTFindTargetObject(this, "FoodContainer", agent.transform, 10);
 
-        BTSequence pickUpNearbyFoodSequence = new BTSequence("PickUpNearbyFood", findFood, moveTo, pickUpAction);
+        BTSequence pickUpNearbyFoodSequence = new BTSequence("PickUpNearbyFood", findFood, moveToTargetObject, pickUpAction);
         BTSuccessToRunning continuesPickUpNearbyFoodSequence = new BTSuccessToRunning(pickUpNearbyFoodSequence);
 
         BTCheckTargetObject ifTargetObjectIsEdible = new BTCheckTargetObject(this, ComponentIDs.EDIBLE);
@@ -37,7 +37,7 @@ public class BlobAI : CharacterBaseAI
         BTSelector checkIfCarriedObjectIsEdible = new BTSelector("checkIfCarriedObjectIsEdible", ifTargetObjectIsEdible, dropItemBecauseItIsWrong);
         BTSequence setAndCheckCarriedItemIsEdible = new BTSequence("setAndCheckCarriedItem", setCarriedObjectAsTarget, checkIfCarriedObjectIsEdible);
 
-        BTSequence takeFoodFromStorage = new BTSequence("take food from storage", findFoodContainer, moveTo, takeOutAction);
+        BTSequence takeFoodFromStorage = new BTSequence("take food from storage", findFoodContainer, moveToTargetObject, takeOutAction);
         BTSuccessToRunning continuesTakeFoodFromStorage = new BTSuccessToRunning(takeFoodFromStorage);
 
         BTSequence eatFoodInHandSequence = new BTSequence("eat food in hand", setAndCheckCarriedItemIsEdible, eatAction);
@@ -49,10 +49,6 @@ public class BlobAI : CharacterBaseAI
 
         State idleState = new State("Blob Idle");
         idleState.AddDecision(eatFood);
-
-        StateMachine stateMachine = new StateMachine(this);
-
-        Sensor = stateMachine;
 
         stateMachine.SetState(idleState);
     }
