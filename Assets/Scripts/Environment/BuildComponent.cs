@@ -6,6 +6,9 @@ public class BuildComponent : EntityComponent
 {
     public override int ID => ComponentIDs.BUILD;
 
+    [SerializeField]
+    private int buildEffort;
+
     private int progress;
     public event System.Action OnBuildFinished;
 
@@ -32,7 +35,7 @@ public class BuildComponent : EntityComponent
 
     public void Build(int strength)
     {
-        if((progress += 1 + strength) >= 100)
+        if((progress += 1 + strength) >= buildEffort)
         {
             container.Clear();
             OnBuildFinished?.Invoke();

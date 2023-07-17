@@ -8,6 +8,9 @@ public class StackContainer : ContainerComponent
     [SerializeField]
     private ObjectType filter;
 
+    [SerializeField]
+    private Color debugColor;
+
     public override void Init(Entity entity)
     {
         storage = new Stack<SmartObject>(capacity);
@@ -49,6 +52,6 @@ public class StackContainer : ContainerComponent
 
     #region DEBUG
     private Renderer renderer;
-    private void SetColor() => renderer.material.color = new Color(0, (float)storage.Count / capacity, 0);
+    private void SetColor() => renderer.material.color = debugColor * storage.Count / capacity;
     #endregion
 }
