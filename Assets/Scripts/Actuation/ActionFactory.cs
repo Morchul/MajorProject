@@ -7,6 +7,7 @@ public class ActionFactory
     public readonly ActionID ActionID;
 
     private readonly Stack<IEntityAction> pool;
+    public int PoolSize => pool.Count;
     private readonly System.Func<IEntityAction> CreateMethod;
 
     public ActionFactory(System.Func<IEntityAction> createMethod, ActionID actionID)

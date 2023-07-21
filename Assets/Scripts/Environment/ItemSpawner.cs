@@ -9,31 +9,44 @@ public class ItemSpawner : MonoBehaviour
     {
         public Entity Prefab;
         public float Interval;
+        public bool OneTime;
         private float timer;
+        private bool spawned;
 
         public bool ShouldSpawn(float dt)
         {
+            if (spawned) return false;
+
             if ((timer += dt) > Interval)
             {
                 timer = 0;
+                if (OneTime) spawned = true;
                 return true;
             }
             return false;
         }
+
+        public void Init()
+        {
+            spawned = false;
+        }
     }
+
+    [SerializeField]
+    private Transform spawnPos;
+
+    [SerializeField]
+    private bool randomSpawnPos;
 
     [SerializeField]
     private SpawnDetails[] spawnItems;
 
     private void Awake()
     {
-        //foreach (SpawnDetails spawnDetail in spawnItems)
-        //{
-        //    if (spawnDetail.ShouldSpawn(Time.deltaTime))
-        //    {
-        //        Spawn(spawnDetail.Prefab);
-        //    }
-        //}
+        for (int i = 0; i < spawnItems.Length; ++i)
+        {
+            spawnItems[i].Init();
+        }
     }
 
     private void Update()
@@ -49,6 +62,8 @@ public class ItemSpawner : MonoBehaviour
 
     private void Spawn(Entity prefab)
     {
-        Instantiate(prefab, Utility.RandomVector2(-10, 10, -10, 10).ToVector3_XZ(), Quaternion.identity);
+        Vector3 spawnPos = (randomSpawnPos) ? Utility.RandomVector2(-10, 10, -10, 10).ToVector3_XZ() : this.spawnPos.position;
+
+        Instantiate(prefab, spawnPos, Quaternion.identity);
     }
 }

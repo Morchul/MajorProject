@@ -10,6 +10,7 @@ public class ActionContainer
     private readonly Entity entity;
 
     private readonly List<IEntityAction> localPool;
+    public int PoolSize => localPool.Count;
 
     public int MaxLocalPoolActions { get; set; }
 
