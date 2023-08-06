@@ -1,9 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// 
-/// </summary>
 public class ActionRingBuffer : IEnumerable
 {
 	private readonly IAction[] buffer;
@@ -16,9 +13,6 @@ public class ActionRingBuffer : IEnumerable
 
 	public ActionRingBuffer(int size)
 	{
-		//Size should be increased by one.
-		//If parameter is 3 you need 4 spaces
-		//since one space has to be reserved to signalise it is empty
 		buffer = new IAction[size + 1];
 		this.size = size + 1;
 		Head = 0;
@@ -58,9 +52,6 @@ public class ActionRingBuffer : IEnumerable
 
 		buffer[insertPoint] = item;
 		buffer[insertPoint].Status = ActionState.ACTIVE;
-
-		//Debug.Log("ring buffer ADD");
-		//DEBUG_OUTPUT_BUFFER();
 	}
 
 	public void Remove()
@@ -76,9 +67,6 @@ public class ActionRingBuffer : IEnumerable
 			else
 				break;
 		}
-
-		//Debug.Log("ring buffer REMOVE");
-		//DEBUG_OUTPUT_BUFFER();
 	}
 
 	public IAction this[int index]

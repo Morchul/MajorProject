@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class HumanBuilderComponent : BuilderComponent
 {
     public override int Progress => (int) (10 *properties.Strength);
