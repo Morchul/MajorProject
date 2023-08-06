@@ -19,7 +19,7 @@ public class ComponentPerformanceTest
     [Test, Performance]
     public void UnityGetComponentPerformanceTest()
     {
-        Human human = GameObject.Find("Human").GetComponent<Human>();
+        Human human = GameObject.Find("Paladin").GetComponent<Human>();
 
         Measure.Method(
             () => { GetComponentUnity(human); })
@@ -29,7 +29,7 @@ public class ComponentPerformanceTest
     [Test, Performance]
     public void NewGetComponentPerformanceTest()
     {
-        Human human = GameObject.Find("Human").GetComponent<Human>();
+        Human human = GameObject.Find("Paladin").GetComponent<Human>();
 
         Measure.Method(
             () => { GetComponentNew(human); })

@@ -72,8 +72,8 @@ public class HumanAI : CharacterBaseAI
 
         BTSelector eatSelector = new BTSelector("eat", eatFoodInHandSequence, continuesPickUpNearbyFoodSequence, continuesTakeFoodFromStorage);
         IPlan eatFoodPlan = new BTRoot(eatSelector, this);
-        Decision eatDecision = new Decision(eatFoodPlan, (_) => 1 - (hunger.Food / 100)); //Linear utility, depending on how much food left
-        eatDecision.SuccessDecisionModifier.Set(0.15f, 0.5f);
+        Decision eatDecision = new Decision(eatFoodPlan, (mod) => mod + 1 - (hunger.Food / 100)); //Linear utility, depending on how much food left
+        eatDecision.SuccessDecisionModifier.Set(0.15f, 1.5f);
         #endregion
 
         #region GatherFood
@@ -123,9 +123,14 @@ public class HumanAI : CharacterBaseAI
         IDecision killBlob = new Decision(killBlobPlan, (_) => 1f);
         #endregion
 
+        BTNode nothing = new BTNode("Nothing", () => AbstractBTNode.BTStatus.SUCCESS);
+        IPlan doNothingPlan = new BTRoot(nothing, this);
+        Decision doNothing = new Decision(doNothingPlan, (_) => 0.5f);
+
         idleState.AddTransaction(hungry);
 
         idleState.AddDecision(eatDecision);
+        //idleState.AddDecision(doNothing);
         idleState.AddDecision(gatherFoodDecision);
         idleState.AddDecision(buildHouseDecision);
 
